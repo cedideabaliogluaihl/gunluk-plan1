@@ -5,40 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plan Rehberim</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 24px;
-      background: #f5f7fa;
-      color: #1f2937;
-    }
-    h1 { margin-bottom: 28px; }
-    label {
-      display: block;
-      margin: 18px 0 8px;
-      font-weight: 600;
-    }
-    select {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      background: white;
-      font-size: 16px;
-    }
-    .box {
-      margin-top: 24px;
-      padding: 20px;
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-    }
-    .muted { color: #6b7280; }
+    body{font-family:Arial,sans-serif;max-width:760px;margin:auto;padding:24px;background:#f5f7fa;color:#1f2937}
+    h1{margin-bottom:28px}
+    label{display:block;margin:18px 0 8px;font-weight:600}
+    select{width:100%;padding:14px;border:1px solid #d1d5db;border-radius:10px;background:#fff;font-size:16px}
+    .box{margin-top:24px;padding:20px;background:#fff;border-radius:12px;border:1px solid #e5e7eb}
+    .outcome{padding:16px;background:#f8fafc;border-radius:10px;line-height:1.6}
+    .muted{color:#6b7280}
+    .code{font-weight:700}
   </style>
 </head>
 <body>
-
   <h1>📚 Plan Rehberim</h1>
 
   <label for="ders">Ders Seçin</label>
@@ -54,52 +31,138 @@
     <option value="">Önce ders seçiniz</option>
   </select>
 
+  <label for="hafta">Hafta</label>
+  <select id="hafta" disabled>
+    <option value="">Önce ders ve sınıf seçiniz</option>
+  </select>
+
   <div class="box">
-    <h2>📅 Hafta</h2>
-    <p class="muted">Ders ve sınıf seçildiğinde burada otomatik olarak gösterilecek.</p>
+    <h2>📅 Seçilen Hafta</h2>
+    <p id="tarih" class="muted">-</p>
 
     <h2>📌 Öğrenme Çıktısı</h2>
-    <p class="muted">Ders ve sınıfa ait plan verisi bağlandığında burada otomatik gösterilecek.</p>
+    <div id="cikti" class="outcome">Ders ve sınıf seçiniz.</div>
   </div>
 
-  <script>
-    const ders = document.getElementById("ders");
-    const sinif = document.getElementById("sinif");
+<script>
+const planlar = [
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-09-14", bitis:"2026-09-18", hafta:"14-18 Eylül 2026", cikti:"BES.9.1.1. Hayat boyu egzersiz alışkanlığı edinmenin sağlığa etkilerini yorumlayabilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-09-21", bitis:"2026-09-25", hafta:"21-25 Eylül 2026", cikti:"BES.9.1.1. Hayat boyu egzersiz alışkanlığı edinmenin sağlığa etkilerini yorumlayabilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-09-28", bitis:"2026-10-02", hafta:"28 Eylül – 2 Ekim 2026", cikti:"BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-10-05", bitis:"2026-10-09", hafta:"5-9 Ekim 2026", cikti:"BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-10-12", bitis:"2026-10-16", hafta:"12-16 Ekim 2026", cikti:"BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-10-19", bitis:"2026-10-23", hafta:"19-23 Ekim 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-10-26", bitis:"2026-10-30", hafta:"26-30 Ekim 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-11-02", bitis:"2026-11-06", hafta:"2-6 Kasım 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-11-09", bitis:"2026-11-13", hafta:"9-13 Kasım 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-11-23", bitis:"2026-11-27", hafta:"23-27 Kasım 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-11-30", bitis:"2026-12-04", hafta:"30 Kasım-4 Aralık 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-12-07", bitis:"2026-12-11", hafta:"7-11 Aralık 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-12-14", bitis:"2026-12-18", hafta:"14-18 Aralık 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-12-21", bitis:"2026-12-25", hafta:"21-25 Aralık 2026", cikti:"BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-12-28", bitis:"2026-12-31", hafta:"28-31 Aralık 2026", cikti:"BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-01-04", bitis:"2027-01-08", hafta:"4-8 Ocak 2027", cikti:"BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-01-11", bitis:"2027-01-15", hafta:"11-15 Ocak 2027", cikti:"BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-02-08", bitis:"2027-02-12", hafta:"8-12 Şubat 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-02-15", bitis:"2027-02-19", hafta:"15-19 Şubat 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-02-22", bitis:"2027-02-26", hafta:"22-26 Şubat 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-03-01", bitis:"2027-03-05", hafta:"1-5 Mart 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-03-15", bitis:"2027-03-19", hafta:"15-19 Mart 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-03-22", bitis:"2027-03-26", hafta:"22-26 Mart 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-03-29", bitis:"2027-04-02", hafta:"29 Mart-2 Nisan 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-04-05", bitis:"2027-04-09", hafta:"5-9 Nisan 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-04-12", bitis:"2027-04-16", hafta:"12-16 Nisan 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-04-26", bitis:"2027-04-30", hafta:"26-30 Nisan 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-03", bitis:"2027-05-07", hafta:"3-7 Mayıs 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-10", bitis:"2027-05-14", hafta:"10-14 Mayıs 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-17", bitis:"2027-05-21", hafta:"17-21 Mayıs 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-24", bitis:"2027-05-28", hafta:"24-28 Mayıs 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-31", bitis:"2027-06-04", hafta:"31 Mayıs-4 Haziran 2027", cikti:"BES.9.3.1. Spor ile ahlak arasındaki ilişkiyi yorumlayabilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-06-07", bitis:"2027-06-11", hafta:"7-11 Haziran 2027", cikti:"BES.9.3.2. Antik ve Modern Olimpiyat Oyunları’nı karşılaştırabilme"},
+  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-06-14", bitis:"2027-06-18", hafta:"14-18 Haziran 2027", cikti:"BES.9.3.3. Atatürk’ün spora ve sporcuya verdiği önem hakkında bilgi toplayabilme"}
+];
 
-    const siniflar = {
-      "Beden Eğitimi ve Spor": [
-        "5. Sınıf", "6. Sınıf", "7. Sınıf", "8. Sınıf",
-        "9. Sınıf", "10. Sınıf", "11. Sınıf", "12. Sınıf"
-      ],
-      "Seçmeli Spor Etkinlikleri": [
-        "5. Sınıf", "6. Sınıf", "7. Sınıf", "8. Sınıf",
-        "9. Sınıf", "10. Sınıf", "11. Sınıf", "12. Sınıf"
-      ],
-      "Spor Eğitimi": [
-        "9. Sınıf", "10. Sınıf", "11. Sınıf", "12. Sınıf"
-      ]
-    };
+const ders = document.getElementById("ders");
+const sinif = document.getElementById("sinif");
+const hafta = document.getElementById("hafta");
+const tarih = document.getElementById("tarih");
+const cikti = document.getElementById("cikti");
 
-    ders.addEventListener("change", () => {
-      sinif.innerHTML = "";
+function aktifTarih() {
+  const now = new Date();
+  const day = now.getDay();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
+  monday.setHours(0,0,0,0);
+  return monday.toISOString().slice(0,10);
+}
 
-      if (!ders.value) {
-        sinif.disabled = true;
-        sinif.innerHTML = '<option value="">Önce ders seçiniz</option>';
-        return;
-      }
+function dersDegisti() {
+  sinif.innerHTML = '<option value="">Sınıf seçiniz</option>';
+  hafta.innerHTML = '<option value="">Önce sınıf seçiniz</option>';
+  sinif.disabled = !ders.value;
+  hafta.disabled = true;
+  tarih.textContent = "-";
+  cikti.textContent = "Ders ve sınıf seçiniz.";
 
-      sinif.disabled = false;
-      sinif.innerHTML = '<option value="">Sınıf seçiniz</option>';
+  if (!ders.value) return;
 
-      siniflar[ders.value].forEach(s => {
-        const option = document.createElement("option");
-        option.value = s;
-        option.textContent = s;
-        sinif.appendChild(option);
-      });
-    });
-  </script>
+  // Bu ilk testte yalnızca 9. sınıf Beden Eğitimi verisi bağlı.
+  if (ders.value === "Beden Eğitimi ve Spor") {
+    const o = document.createElement("option");
+    o.value = "9. Sınıf";
+    o.textContent = "9. Sınıf";
+    sinif.appendChild(o);
+  }
+}
 
+function sinifDegisti() {
+  hafta.innerHTML = '<option value="">Hafta seçiniz</option>';
+  hafta.disabled = true;
+  tarih.textContent = "-";
+  cikti.textContent = "Hafta seçiniz.";
+
+  const liste = planlar.filter(x => x.ders === ders.value && x.sinif === sinif.value);
+  if (!liste.length) return;
+
+  liste.forEach((x, i) => {
+    const o = document.createElement("option");
+    o.value = i;
+    o.textContent = x.hafta;
+    hafta.appendChild(o);
+  });
+
+  hafta.disabled = false;
+
+  // Bugünün bulunduğu haftayı otomatik seç.
+  const aktif = aktifTarih();
+  let index = liste.findIndex(x => aktif >= x.baslangic && aktif <= x.bitis);
+
+  // Aktif hafta plan dışında ise, mevcut tarihe en yakın sonraki hafta.
+  if (index === -1) {
+    index = liste.findIndex(x => x.baslangic >= aktif);
+  }
+  if (index === -1) index = liste.length - 1;
+
+  hafta.value = String(index);
+  goster(liste[index]);
+}
+
+function goster(kayit) {
+  tarih.textContent = kayit.hafta;
+  cikti.innerHTML = '<span class="code">' + kayit.cikti.split(". ").slice(0,1)[0] + '.</span> ' +
+                    kayit.cikti.substring(kayit.cikti.indexOf(". ") + 2);
+}
+
+function haftaDegisti() {
+  const liste = planlar.filter(x => x.ders === ders.value && x.sinif === sinif.value);
+  const kayit = liste[Number(hafta.value)];
+  if (kayit) goster(kayit);
+}
+
+ders.addEventListener("change", dersDegisti);
+sinif.addEventListener("change", sinifDegisti);
+hafta.addEventListener("change", haftaDegisti);
+</script>
 </body>
 </html>
