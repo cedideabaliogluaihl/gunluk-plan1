@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan Rehberim</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #f5f7fa;
+      color: #1f2937;
+    }
+    h1 { margin-bottom: 28px; }
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-weight: 600;
+    }
+    select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      background: white;
+      font-size: 16px;
+    }
+    .box {
+      margin-top: 24px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+    }
+    .muted { color: #6b7280; }
+  </style>
+</head>
+<body>
+
+  <h1>📚 Plan Rehberim</h1>
+
+  <label for="ders">Ders Seçin</label>
+  <select id="ders">
+    <option value="">Ders seçiniz</option>
+    <option value="Beden Eğitimi ve Spor">Beden Eğitimi ve Spor</option>
+    <option value="Seçmeli Spor Etkinlikleri">Seçmeli Spor Etkinlikleri</option>
+    <option value="Spor Eğitimi">Spor Eğitimi</option>
+  </select>
+
+  <label for="sinif">Sınıf Seçin</label>
+  <select id="sinif" disabled>
+    <option value="">Önce ders seçiniz</option>
+  </select>
+
+  <div class="box">
+    <h2>📅 Hafta</h2>
+    <p class="muted">Ders ve sınıf seçildiğinde burada otomatik olarak gösterilecek.</p>
+
+    <h2>📌 Öğrenme Çıktısı</h2>
+    <p class="muted">Ders ve sınıfa ait plan verisi bağlandığında burada otomatik gösterilecek.</p>
+  </div>
+
+  <script>
+    const ders = document.getElementById("ders");
+    const sinif = document.getElementById("sinif");
+
+    const siniflar = {
+      "Beden Eğitimi ve Spor": [
+        "5. Sınıf", "6. Sınıf", "7. Sınıf", "8. Sınıf",
+        "9. Sınıf", "10. Sınıf", "11. Sınıf", "12. Sınıf"
+      ],
+      "Seçmeli Spor Etkinlikleri": [
+        "5. Sınıf", "6. Sınıf", "7. Sınıf", "8. Sınıf",
+        "9. Sınıf", "10. Sınıf", "11. Sınıf", "12. Sınıf"
+      ],
+      "Spor Eğitimi": [
+        "9. Sınıf", "10. Sınıf", "11. Sınıf", "12. Sınıf"
+      ]
+    };
+
+    ders.addEventListener("change", () => {
+      sinif.innerHTML = "";
+
+      if (!ders.value) {
+        sinif.disabled = true;
+        sinif.innerHTML = '<option value="">Önce ders seçiniz</option>';
+        return;
+      }
+
+      sinif.disabled = false;
+      sinif.innerHTML = '<option value="">Sınıf seçiniz</option>';
+
+      siniflar[ders.value].forEach(s => {
+        const option = document.createElement("option");
+        option.value = s;
+        option.textContent = s;
+        sinif.appendChild(option);
+      });
+    });
+  </script>
+
+</body>
+</html>
