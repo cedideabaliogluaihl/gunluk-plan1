@@ -1,168 +1,86 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plan Rehberim</title>
-  <style>
-    body{font-family:Arial,sans-serif;max-width:760px;margin:auto;padding:24px;background:#f5f7fa;color:#1f2937}
-    h1{margin-bottom:28px}
-    label{display:block;margin:18px 0 8px;font-weight:600}
-    select{width:100%;padding:14px;border:1px solid #d1d5db;border-radius:10px;background:#fff;font-size:16px}
-    .box{margin-top:24px;padding:20px;background:#fff;border-radius:12px;border:1px solid #e5e7eb}
-    .outcome{padding:16px;background:#f8fafc;border-radius:10px;line-height:1.6}
-    .muted{color:#6b7280}
-    .code{font-weight:700}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Rehberim</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:900px;margin:auto;padding:24px;background:#f5f7fa;color:#1f2937}
+h1{margin-bottom:28px} label{display:block;margin:18px 0 8px;font-weight:600}
+select{width:100%;padding:14px;border:1px solid #d1d5db;border-radius:10px;background:#fff;font-size:16px}
+.box{margin-top:24px;padding:22px;background:#fff;border-radius:14px;border:1px solid #e5e7eb}
+.card{margin-top:16px;padding:16px;background:#f8fafc;border-radius:10px;border-left:4px solid #2563eb}
+h2{margin-bottom:8px} h3{margin-bottom:8px;color:#111827} .muted{color:#6b7280}
+.pre{white-space:pre-line;line-height:1.55} .badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e5e7eb;margin:3px 3px 3px 0;font-size:13px}
+</style>
 </head>
 <body>
-  <h1>📚 Plan Rehberim</h1>
+<h1>📚 Plan Rehberim</h1>
 
-  <label for="ders">Ders Seçin</label>
-  <select id="ders">
-    <option value="">Ders seçiniz</option>
-    <option value="Beden Eğitimi ve Spor">Beden Eğitimi ve Spor</option>
-    <option value="Seçmeli Spor Etkinlikleri">Seçmeli Spor Etkinlikleri</option>
-    <option value="Spor Eğitimi">Spor Eğitimi</option>
-  </select>
+<label for="ders">Ders Seçin</label>
+<select id="ders">
+<option value="">Ders seçiniz</option>
+<option value="Beden Eğitimi ve Spor">Beden Eğitimi ve Spor</option>
+<option value="Seçmeli Spor Etkinlikleri">Seçmeli Spor Etkinlikleri</option>
+<option value="Spor Eğitimi">Spor Eğitimi</option>
+</select>
 
-  <label for="sinif">Sınıf Seçin</label>
-  <select id="sinif" disabled>
-    <option value="">Önce ders seçiniz</option>
-  </select>
+<label for="sinif">Sınıf Seçin</label>
+<select id="sinif" disabled><option value="">Önce ders seçiniz</option></select>
 
-  <label for="hafta">Hafta</label>
-  <select id="hafta" disabled>
-    <option value="">Önce ders ve sınıf seçiniz</option>
-  </select>
+<label for="hafta">Hafta</label>
+<select id="hafta" disabled><option value="">Önce ders ve sınıf seçiniz</option></select>
 
-  <div class="box">
-    <h2>📅 Seçilen Hafta</h2>
-    <p id="tarih" class="muted">-</p>
-
-    <h2>📌 Öğrenme Çıktısı</h2>
-    <div id="cikti" class="outcome">Ders ve sınıf seçiniz.</div>
-  </div>
+<div class="box">
+<h2>📅 Seçilen Hafta</h2>
+<p id="tarih" class="muted">-</p>
+<div id="icerik"><p class="muted">Ders ve sınıf seçiniz.</p></div>
+</div>
 
 <script>
-const planlar = [
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-09-14", bitis:"2026-09-18", hafta:"14-18 Eylül 2026", cikti:"BES.9.1.1. Hayat boyu egzersiz alışkanlığı edinmenin sağlığa etkilerini yorumlayabilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-09-21", bitis:"2026-09-25", hafta:"21-25 Eylül 2026", cikti:"BES.9.1.1. Hayat boyu egzersiz alışkanlığı edinmenin sağlığa etkilerini yorumlayabilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-09-28", bitis:"2026-10-02", hafta:"28 Eylül – 2 Ekim 2026", cikti:"BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-10-05", bitis:"2026-10-09", hafta:"5-9 Ekim 2026", cikti:"BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-10-12", bitis:"2026-10-16", hafta:"12-16 Ekim 2026", cikti:"BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-10-19", bitis:"2026-10-23", hafta:"19-23 Ekim 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-10-26", bitis:"2026-10-30", hafta:"26-30 Ekim 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-11-02", bitis:"2026-11-06", hafta:"2-6 Kasım 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-11-09", bitis:"2026-11-13", hafta:"9-13 Kasım 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-11-23", bitis:"2026-11-27", hafta:"23-27 Kasım 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-11-30", bitis:"2026-12-04", hafta:"30 Kasım-4 Aralık 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-12-07", bitis:"2026-12-11", hafta:"7-11 Aralık 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-12-14", bitis:"2026-12-18", hafta:"14-18 Aralık 2026", cikti:"BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-12-21", bitis:"2026-12-25", hafta:"21-25 Aralık 2026", cikti:"BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2026-12-28", bitis:"2026-12-31", hafta:"28-31 Aralık 2026", cikti:"BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-01-04", bitis:"2027-01-08", hafta:"4-8 Ocak 2027", cikti:"BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-01-11", bitis:"2027-01-15", hafta:"11-15 Ocak 2027", cikti:"BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-02-08", bitis:"2027-02-12", hafta:"8-12 Şubat 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-02-15", bitis:"2027-02-19", hafta:"15-19 Şubat 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-02-22", bitis:"2027-02-26", hafta:"22-26 Şubat 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-03-01", bitis:"2027-03-05", hafta:"1-5 Mart 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-03-15", bitis:"2027-03-19", hafta:"15-19 Mart 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-03-22", bitis:"2027-03-26", hafta:"22-26 Mart 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-03-29", bitis:"2027-04-02", hafta:"29 Mart-2 Nisan 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-04-05", bitis:"2027-04-09", hafta:"5-9 Nisan 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-04-12", bitis:"2027-04-16", hafta:"12-16 Nisan 2027", cikti:"BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-04-26", bitis:"2027-04-30", hafta:"26-30 Nisan 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-03", bitis:"2027-05-07", hafta:"3-7 Mayıs 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-10", bitis:"2027-05-14", hafta:"10-14 Mayıs 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-17", bitis:"2027-05-21", hafta:"17-21 Mayıs 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-24", bitis:"2027-05-28", hafta:"24-28 Mayıs 2027", cikti:"BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-05-31", bitis:"2027-06-04", hafta:"31 Mayıs-4 Haziran 2027", cikti:"BES.9.3.1. Spor ile ahlak arasındaki ilişkiyi yorumlayabilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-06-07", bitis:"2027-06-11", hafta:"7-11 Haziran 2027", cikti:"BES.9.3.2. Antik ve Modern Olimpiyat Oyunları’nı karşılaştırabilme"},
-  {ders:"Beden Eğitimi ve Spor", sinif:"9. Sınıf", baslangic:"2027-06-14", bitis:"2027-06-18", hafta:"14-18 Haziran 2027", cikti:"BES.9.3.3. Atatürk’ün spora ve sporcuya verdiği önem hakkında bilgi toplayabilme"}
-];
+const planlar = [{"date": "14-18 Eylül 2026", "theme": "1. Tema: Zindelik ve Fiziksel Aktivite", "outcome": "BES.9.1.1. Hayat boyu egzersiz alışkanlığı edinmenin sağlığa etkilerini yorumlayabilme", "process": "a) Hayat boyu egzersiz alışkanlığının sağlığa etkilerini inceler.\nb) Hayat boyu egzersiz alışkanlığının sağlığa etkilerini yazılı veya görsel biçimlere dönüştürür.\nc) Hayat boyu egzersiz alışkanlığının sağlığa etkilerini özgün bir şekilde ifade eder.", "topic": "‘Yaşam Boyu Egzersizin Etkileri’: Öğrenciler, Egzersizin sağlıklı yaşam üzerinde etkilerini açıklayan sloganlar üretirler. Sloganlar afiş hâline getirilir. Daha sonra sloganlar arasından oy çokluğuyla en beğenilenleri, belirli gün ve haftalarla uyuşanlarından okulda sergilenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, OB1. Bilgi Okuryazarlığı, D13. Sağlıklı Yaşam", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, Öz değerlendirme formu değerlendirilebilir.", "start": "2026-09-14", "end": "2026-09-18"}, {"date": "21-25 Eylül 2026", "theme": "1. Tema: Zindelik ve Fiziksel Aktivite", "outcome": "BES.9.1.1. Hayat boyu egzersiz alışkanlığı edinmenin sağlığa etkilerini yorumlayabilme", "process": "a) Hayat boyu egzersiz alışkanlığının sağlığa etkilerini inceler.\nb) Hayat boyu egzersiz alışkanlığının sağlığa etkilerini yazılı veya görsel biçimlere dönüştürür.\nc) Hayat boyu egzersiz alışkanlığının sağlığa etkilerini özgün bir şekilde ifade eder.", "topic": "‘Egzersiz Yapıyorum’: Spora başlamadan önce öğrencilerden ısınma hareketleri yapmaları istenir. Öğrencilerden günlük egzersiz yapmaları için bildikleri egzersizler göstermeleri istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, OB1. Bilgi Okuryazarlığı, D13. Sağlıklı Yaşam", "evidence": "", "start": "2026-09-21", "end": "2026-09-25"}, {"date": "28 Eylül – 2 Ekim 2026", "theme": "1. Tema: Zindelik ve Fiziksel Aktivite", "outcome": "BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme", "process": "a) Fiziksel uygunluk bileşenlerinden gücü açıklar.\nb) Fiziksel uygunluk bileşenlerinden gücü içeren hareketleri uygular.\nc) Fiziksel uygunluk bileşenlerinden gücü geliştirir.", "topic": "“Fiziksel Uygunluğumu Ölçüyorum”: Öğrencilerin fiziksel uygunluklarını belirlenmesi için sene başında mekik, şınav, otur-uzan esneklik ölçümü, vücut ağırlığı ve boy uzunluğu ölçümü yapılır.", "program": "BEOSAB4. Fiziksel Aktiviteye Katılma, SDB2.2. İş Birliği, D3. Çalışkanlık, E3.2. Odaklanma", "evidence": "", "start": "2026-09-28", "end": "2026-10-02"}, {"date": "5-9 Ekim 2026", "theme": "1. Tema: Zindelik ve Fiziksel Aktivite", "outcome": "BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme", "process": "a) Fiziksel uygunluk bileşenlerinden gücü açıklar.\nb) Fiziksel uygunluk bileşenlerinden gücü içeren hareketleri uygular.\nc) Fiziksel uygunluk bileşenlerinden gücü geliştirir.", "topic": "“Fiziksel Uygunluğumu Ölçüyorum”: Öğrencilere fiziksel aktivite istasyonu kurulur ve her istasyondaki hareket becerileri yapılması istenir.", "program": "BEOSAB4. Fiziksel Aktiviteye Katılma, SDB2.2. İş Birliği, D3. Çalışkanlık, E3.2. Odaklanma", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, Öz değerlendirme formu değerlendirilebilir.", "start": "2026-10-05", "end": "2026-10-09"}, {"date": "12-16 Ekim 2026", "theme": "1. Tema: Zindelik ve Fiziksel Aktivite", "outcome": "BES.9.1.2. Fiziksel uygunluk bileşenlerinden gücü sağlayabilme", "process": "a) Fiziksel uygunluk bileşenlerinden gücü açıklar.\nb) Fiziksel uygunluk bileşenlerinden gücü içeren hareketleri uygular.\nc) Fiziksel uygunluk bileşenlerinden gücü geliştirir.", "topic": "‘Fiziksel aktivite istasyonu’: Isınma hareketleri öğrencilere anlatılır, daha sonra öğrencilere örneklerle gösterilir ve yaptırılır.", "program": "BEOSAB4. Fiziksel Aktiviteye Katılma, SDB2.2. İş Birliği, D3. Çalışkanlık, E3.2. Odaklanma", "evidence": "", "start": "2026-10-12", "end": "2026-10-16"}, {"date": "19-23 Ekim 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini farklı durum/ortamlarda uygular.", "topic": "‘Futbolda ısınmayı öğreniyorum, temel vuruşları yapıyorum’: Futbolda ısınma hareketleri ve temel vuruş becerisinin uygulama basamakları ve çeşitleri öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB2.2. İş Birliği, D4. Dostluk", "evidence": "", "start": "2026-10-19", "end": "2026-10-23"}, {"date": "26-30 Ekim 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini farklı durum/ortamlarda uygular.", "topic": "‘Futbolda pas verebiliyorum’: Futbol paslaşma ve top kontrol becerisinin uygulama basamakları ve çeşitleri öğrenciler tarafından etkinliklerde gösterilmesi istenir. 29 Ekim Cumhuriyet Bayramı", "program": "SDB2.2. İş Birliği, D4. Dostluk", "evidence": "", "start": "2026-10-26", "end": "2026-10-30"}, {"date": "2-6 Kasım 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini farklı durum/ortamlarda uygular.", "topic": "‘Futbolda top sürebiliyorum’: Futbol top sürme becerisinin uygulama basamakları ve çeşitleri öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB2.2. İş Birliği, D4. Dostluk", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, I. Uygulama Sınavı", "start": "2026-11-02", "end": "2026-11-06"}, {"date": "9-13 Kasım 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini farklı durum/ortamlarda uygular.", "topic": "‘Futbolda şut atıyorum’: Futbolda şut atma becerisinin uygulama basamakları ve çeşitleri öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB2.2. İş Birliği, D4. Dostluk", "evidence": "", "start": "2026-11-09", "end": "2026-11-13"}, {"date": "16-20 Kasım 2026", "theme": "I. ARA TATİL", "outcome": "", "process": "", "topic": "", "program": "", "evidence": "", "start": "2026-11-16", "end": "2026-11-20"}, {"date": "23-27 Kasım 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini farklı durum/ortamlarda uygular.", "topic": "’Futbolda topu kontrol ediyorum’: Futbolda top kontrol becerisinin uygulama basamakları ve çeşitleri öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB2.2. İş Birliği, D4. Dostluk", "evidence": "Öz değerlendirme formu değerlendirilebilir.", "start": "2026-11-23", "end": "2026-11-27"}, {"date": "30 Kasım – 4 Aralık 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini farklı durum/ortamlarda uygular.", "topic": "‘Futbolda kafa vuruşu ve top kontrolü yapıyorum’: Futbol top sürme ve aldatma becerisinin uygulama basamakları ve çeşitleri öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB2.2. İş Birliği, D4. Dostluk, SDB2.1. İletişim, SDB2.2. İş Birliği, D12. Sabır", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, Öz değerlendirme formu değerlendirilebilir.", "start": "2026-11-30", "end": "2026-12-04"}, {"date": "7-11 Aralık 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini farklı durum/ortamlarda uygular.", "topic": "‘Futbolda rakiplerimi aldatıyorum’: Futbol top sürme ve aldatma becerisinin uygulama basamakları ve çeşitleri öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB2.2. İş Birliği, D4. Dostluk, SDB2.1. İletişim, D12. Sabır", "evidence": "", "start": "2026-12-07", "end": "2026-12-11"}, {"date": "14-18 Aralık 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.1. Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen takım mücadele sporunun özelleşmiş hareket becerilerini farklı durum/ortamlarda uygular.", "topic": "‘Futbolda duran ve hareketli toplara vuruyorum’: Futbolda duran ve hareketli topa vurma becerisinin uygulama basamakları ve çeşitleri öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB2.2. İş Birliği, D4. Dostluk, SDB2.1. İletişim, D12. Sabır", "evidence": "", "start": "2026-12-14", "end": "2026-12-18"}, {"date": "21-25 Aralık 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen takım mücadele sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen takım mücadele sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen takım mücadele sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Futbolda sistemleri öğreniyorum’: Öğrencilerden futbolda kullanılan sistemleri araştırmaları ve etkinliklerde bu sistemleri kullanmaları istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D12. Sabır", "evidence": "", "start": "2026-12-21", "end": "2026-12-25"}, {"date": "28-31 Aralık 2026", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen takım mücadele sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen takım mücadele sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen takım mücadele sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Futbolda savunma yapıyorum’: Futbolda savunma organizasyonlarında taktik belirlemeleri ve müsabaka içinde karşılaşılan problemlere çözüm sunmaları istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D12. Sabır", "evidence": "", "start": "2026-12-28", "end": "2026-12-31"}, {"date": "4-8 Ocak 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen takım mücadele sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen takım mücadele sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen takım mücadele sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Hücum yapıyorum’: Öğrencilerden futbolda hızlı hücum organizasyonlarında taktik belirlemeleri ve müsabaka içinde karşılaşılan problemlere çözüm sunmaları istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D12. Sabır", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, Öz değerlendirme formu değerlendirilebilir. II. Uygulama Sınavı", "start": "2027-01-04", "end": "2027-01-08"}, {"date": "11-15 Ocak 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.2. Belirlenen takım mücadele sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen takım mücadele sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen takım mücadele sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen takım mücadele sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Hücum ve savunma yapıyorum’: Öğrencilerden futbolda hücum ve savunma organizasyonlarında taktik belirlemeleri ve müsabaka içinde karşılaşılan problemlere çözüm sunmaları istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D12. Sabır", "evidence": "", "start": "2027-01-11", "end": "2027-01-15"}, {"date": "18-22 Ocak 2027", "theme": "Okul temelli planlama / I. DÖNEMİN SONU", "outcome": "", "process": "", "topic": "‘Okul temelli planlama’: Okul dışı öğrenme etkinlikleri, araştırma ve gözlem, sosyal etkinlikler, proje çalışmaları, yerel çalışmalar, okuma çalışmaları, turnuvalar, spor gezileri gibi çalışmalar yaptırılır.", "program": "", "evidence": "", "start": "2027-01-18", "end": "2027-01-22"}, {"date": "8-12 Şubat 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen file/raket sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini farklı durum / ortamlarda uygular.", "topic": "‘Voleybol oyun kurallarını öğreniyorum’: Voleybol oyununun tanımı yapılır. Voleybol sahası ölçüleri, bir takımdaki as oyuncu ve yedek oyuncu sayısı, oyuncu değiştirme hakkını, maçı yöneten hakem sayısını, oyun süresi ile devre arası, vb. kurallar anlatılır. Soru cevap yöntemiyle geri bildirim alınmaya çalışılır.", "program": "SDB1.2. Kendini Düzenleme (Öz Düzenleme), SDB2.2. İş Birliği, D6. Dürüstlük, E3.3. Yaratıcılık, E3.6. Analitiklik, KB3.2. Problem Çözme", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, Öz değerlendirme formu değerlendirilebilir.", "start": "2027-02-08", "end": "2027-02-12"}, {"date": "15-19 Şubat 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen file/raket sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini farklı durum / ortamlarda uygular.", "topic": "‘Voleybolda duruşları öğreniyorum’: Voleybolda duruş becerisinin uygulama basamakları öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB1.2. Kendini Düzenleme (Öz Düzenleme), SDB2.2. İş Birliği, D6. Dürüstlük, E3.3. Yaratıcılık, E3.6. Analitiklik, KB3.2. Problem Çözme", "evidence": "", "start": "2027-02-15", "end": "2027-02-19"}, {"date": "22-26 Şubat 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen file/raket sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini farklı durum / ortamlarda uygular.", "topic": "‘Voleybolda parmak pası öğreniyorum’: Voleybolda parmak pas becerisinin uygulama basamakları öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB1.2. Kendini Düzenleme (Öz Düzenleme), SDB2.2. İş Birliği, D6. Dürüstlük, E3.3. Yaratıcılık, E3.6. Analitiklik, KB3.2. Problem Çözme", "evidence": "", "start": "2027-02-22", "end": "2027-02-26"}, {"date": "29 Mart – 2 Nisan 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen file/raket sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini farklı durum / ortamlarda uygular.", "topic": "‘Voleybolda servis tekniğini geliştiriyorum’: Voleybolda servis becerisini öğrenciler tarafından farklı durumlarda kullanmaları istenir.", "program": "SDB1.2. Kendini Düzenleme (Öz Düzenleme), SDB2.2. İş Birliği, D6. Dürüstlük, E3.3. Yaratıcılık, E3.6. Analitiklik", "evidence": "", "start": "2027-03-29", "end": "2027-04-02"}, {"date": "5-9 Nisan 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen file/raket sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini farklı durum / ortamlarda uygular.", "topic": "‘Voleybolda blok yapıyorum’: Voleybolda blok becerisinin uygulama basamakları, öğrenciler tarafından etkinliklerde gösterilmesi istenir.", "program": "SDB1.2. Kendini Düzenleme (Öz Düzenleme), SDB2.2. İş Birliği, D6. Dürüstlük, E3.3. Yaratıcılık, E3.6. Analitiklik, KB3.2. Problem Çözme", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, Öz değerlendirme formu değerlendirilebilir.", "start": "2027-04-05", "end": "2027-04-09"}, {"date": "12-16 Nisan 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.3. Belirlenen file/raket sporunun özelleşmiş hareket becerilerini sergileyebilme", "process": "a) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini algılar.\nb) Belirlenen file/raket sporunun özelleşmiş hareket becerilerinin basamaklarını gösterir.\nc) Belirlenen file/raket sporunun özelleşmiş hareket becerilerini farklı durum / ortamlarda uygular.", "topic": "‘Voleybolda smaç atıyorum’: Öğrencilerden voleybolda hücum organizasyonlarında çok sık kullanılan smaç vuruşu nasıl kullanmaları gerektiğini sorulur. Taktiksel olarak etkinliklerle kullanmaları istenir.", "program": "SDB1.2. Kendini Düzenleme (Öz Düzenleme), SDB2.2. İş Birliği, D6. Dürüstlük, E3.3. Yaratıcılık, E3.6. Analitiklik, KB3.2. Problem Çözme", "evidence": "I. Uygulama Sınavı", "start": "2027-04-12", "end": "2027-04-16"}, {"date": "19-23 Nisan 2027", "theme": "Okul temelli planlama", "outcome": "", "process": "", "topic": "‘Okul temelli planlama’: Okul dışı öğrenme etkinlikleri, araştırma ve gözlem, sosyal etkinlikler, proje çalışmaları, yerel çalışmalar, okuma çalışmaları, turnuvalar, spor gezileri gibi çalışmalar yaptırılır. Fiziksel uygunluk testi yapılır", "program": "", "evidence": "", "start": "2027-04-19", "end": "2027-04-23"}, {"date": "26-30 Nisan 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen file/raket sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen file/raket sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen file/raket sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Voleybolda servis at, blok yap’: Voleybolda servis ve blok becerileri öğrenciler tarafından yapmaları istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D3. Çalışkanlık, E3.3. Yaratıcılık, KB3.2. Problem Çözme", "evidence": "", "start": "2027-04-26", "end": "2027-04-30"}, {"date": "3-7 Mayıs 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen file/raket sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen file/raket sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen file/raket sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Voleybolda savunma yapıyorum’: Öğrencilerden voleybolda savunma organizasyonlarında taktik belirlemeleri ve müsabaka içinde karşılaşılan problemlere çözüm sunmaları istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D3. Çalışkanlık, E3.3. Yaratıcılık, KB3.2. Problem Çözme", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, Öz değerlendirme formu değerlendirilebilir.", "start": "2027-05-03", "end": "2027-05-07"}, {"date": "10-14 Mayıs 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen file/raket sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen file/raket sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen file/raket sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Voleybolda hücum yapıyorum’: Öğrencilerden voleybolda hücum organizasyonlarında taktik belirlemeleri ve müsabaka içinde karşılaşılan problemlere çözüm sunmaları istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D3. Çalışkanlık, E3.3. Yaratıcılık, KB3.2. Problem Çözme", "evidence": "", "start": "2027-05-10", "end": "2027-05-14"}, {"date": "17-21 Mayıs 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen file/raket sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen file/raket sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen file/raket sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Voleybolda sistemler’: Öğrencilerden voleybolda kullanılan sistemleri araştırmaları ve etkinliklerde bu sistemleri kullanmaları istenir. 19 Mayıs Atatürk’ü Anma, Gençlik ve Spor Bayramının anlam ve önemi hakkında araştırma yaparlar.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D3. Çalışkanlık, E3.3. Yaratıcılık, KB3.2. Problem Çözme", "evidence": "", "start": "2027-05-17", "end": "2027-05-21"}, {"date": "24-28 Mayıs 2027", "theme": "2. Tema: Spor Eğitimi", "outcome": "BES.9.2.4. Belirlenen file/raket sporunda taktik ve strateji geliştirebilme", "process": "a) Belirlenen file/raket sporunda taktiksel/stratejik problemi/durumu belirler.\nb) Belirlenen file/raket sporunda belirlenen problemin/durumun çözümüne ilişkin öneri sunar.\nc) Belirlenen file/raket sporunda seçilen taktik/stratejiyi uygular.", "topic": "‘Voleybolda sistemler’: Öğrencilerden voleybolda kullanılan sistemleri araştırmaları ve etkinliklerde bu sistemleri kullanmaları istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D3. Çalışkanlık, E3.3. Yaratıcılık, KB3.2. Problem Çözme", "evidence": "", "start": "2027-05-24", "end": "2027-05-28"}, {"date": "31 Mayıs – 4 Haziran 2027", "theme": "3. Tema: Spor Kültürü", "outcome": "BES.9.3.1. Spor ile ahlak arasındaki ilişkiyi yorumlayabilme", "process": "a) Spor ile ahlak arasındaki ilişkiyi inceler.\nb) Spor ile ahlak arasındaki ilişkiyi bağlamından kopmadan yazılı veya görsel biçimlere dönüştürür.\nc) Spor ile ahlak arasındaki ilişkiyi anlamı değişmeyecek şekilde yeniden ifade eder.", "topic": "‘Spor Ahlakı: Öğrencilere spor ahlakıyla ilgili araştırmalar yapılması istenir. Öğrencilere spor ahlakıyla ilgili filmler izlettirebilir. Etkinliklerde adil olma değeri üzerinde durulur.", "program": "SDB2.1. İletişim, D19. Vatanseverlik, E3.3. Yaratıcılık, OB1. Bilgi Okuryazarlığı, OB4. Görsel Okuryazarlık", "evidence": "Öğrenme çıktılarını Performans görevi, Öğrenme günlüğü, Açık uçlu sorular, Öz değerlendirme formu değerlendirilebilir. II. Uygulama Sınavı", "start": "2027-05-31", "end": "2027-06-04"}, {"date": "7-11 Haziran 2027", "theme": "3. Tema: Spor Kültürü", "outcome": "BES.9.3.2. Antik ve Modern Olimpiyat Oyunları’nı karşılaştırabilme", "process": "a) Antik ve Modern Olimpiyat Oyunları’nın özelliklerini belirler.\nb) Antik ve Modern Olimpiyat Oyunları’nın benzerlik ve farklılıklarını listeler.", "topic": "‘Olimpiyatlar’: Öğrencilere, olimpiyatlarda hangi spor dallarının olduğu, Olimpiyatların ülke tanıtımındaki yararlarının neler olduğu, Olimpiyat oyunları kitle iletişim araçları ile daha iyi nasıl takip edilir? Soruları ile sınıfta tartışma ortamı oluşturulur.", "program": "SDB2.2. İş Birliği, D4. Dostluk, OB1. Bilgi Okuryazarlığı, OB2. Dijital Okuryazarlık, OB5. Kültür Okuryazarlığı, KB2.7. Karşılaştırma, KB2.14. Yorumlama", "evidence": "", "start": "2027-06-07", "end": "2027-06-11"}, {"date": "14-18 Haziran 2027", "theme": "3. Tema: Spor Kültürü", "outcome": "BES.9.3.3. Atatürk’ün spora ve sporcuya verdiği önem hakkında bilgi toplayabilme", "process": "a) Atatürk’ün spora ve sporcuya verdiği önem hakkında bilgiye ulaşmak için kullanacağı araçları belirler.\nb) Atatürk’ün spora ve sporcuya verdiği önem hakkında bilgileri bulur.\nc) Atatürk’ün spora ve sporcuya verdiği önem hakkında bilgileri doğrular.\nd) Atatürk’ün spora ve sporcuya verdiği önem hakkında bilgileri kaydeder.", "topic": "‘Atatürk’ün Spora ve Sporcuya Verdiği Önem’: Öğrenciler, Atatürk’ün spora ve sporcuya verdiği önem hakkında bilgi toplaması istenir.", "program": "SDB2.1. İletişim, SDB2.2. İş Birliği, D3. Çalışkanlık, OB1. Bilgi Okuryazarlığı", "evidence": "", "start": "2027-06-14", "end": "2027-06-18"}];
+const ders=document.getElementById("ders"), sinif=document.getElementById("sinif"), hafta=document.getElementById("hafta");
+const tarih=document.getElementById("tarih"), icerik=document.getElementById("icerik");
 
-const ders = document.getElementById("ders");
-const sinif = document.getElementById("sinif");
-const hafta = document.getElementById("hafta");
-const tarih = document.getElementById("tarih");
-const cikti = document.getElementById("cikti");
-
-function aktifTarih() {
-  const now = new Date();
-  const day = now.getDay();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
-  monday.setHours(0,0,0,0);
-  return monday.toISOString().slice(0,10);
+function aktifTarih(){
+ const now=new Date(), day=now.getDay(), monday=new Date(now);
+ monday.setDate(now.getDate()-(day===0?6:day-1)); monday.setHours(0,0,0,0);
+ return monday.toISOString().slice(0,10);
 }
-
-function dersDegisti() {
-  sinif.innerHTML = '<option value="">Sınıf seçiniz</option>';
-  hafta.innerHTML = '<option value="">Önce sınıf seçiniz</option>';
-  sinif.disabled = !ders.value;
-  hafta.disabled = true;
-  tarih.textContent = "-";
-  cikti.textContent = "Ders ve sınıf seçiniz.";
-
-  if (!ders.value) return;
-
-  // Bu ilk testte yalnızca 9. sınıf Beden Eğitimi verisi bağlı.
-  if (ders.value === "Beden Eğitimi ve Spor") {
-    const o = document.createElement("option");
-    o.value = "9. Sınıf";
-    o.textContent = "9. Sınıf";
-    sinif.appendChild(o);
-  }
+function dersDegisti(){
+ sinif.innerHTML='<option value="">Sınıf seçiniz</option>'; hafta.innerHTML='<option value="">Önce sınıf seçiniz</option>';
+ sinif.disabled=!ders.value; hafta.disabled=true; tarih.textContent="-"; icerik.innerHTML='<p class="muted">Ders ve sınıf seçiniz.</p>';
+ if(ders.value==="Beden Eğitimi ve Spor"){
+   const o=document.createElement("option"); o.value="9. Sınıf"; o.textContent="9. Sınıf"; sinif.appendChild(o);
+ }
 }
-
-function sinifDegisti() {
-  hafta.innerHTML = '<option value="">Hafta seçiniz</option>';
-  hafta.disabled = true;
-  tarih.textContent = "-";
-  cikti.textContent = "Hafta seçiniz.";
-
-  const liste = planlar.filter(x => x.ders === ders.value && x.sinif === sinif.value);
-  if (!liste.length) return;
-
-  liste.forEach((x, i) => {
-    const o = document.createElement("option");
-    o.value = i;
-    o.textContent = x.hafta;
-    hafta.appendChild(o);
-  });
-
-  hafta.disabled = false;
-
-  // Bugünün bulunduğu haftayı otomatik seç.
-  const aktif = aktifTarih();
-  let index = liste.findIndex(x => aktif >= x.baslangic && aktif <= x.bitis);
-
-  // Aktif hafta plan dışında ise, mevcut tarihe en yakın sonraki hafta.
-  if (index === -1) {
-    index = liste.findIndex(x => x.baslangic >= aktif);
-  }
-  if (index === -1) index = liste.length - 1;
-
-  hafta.value = String(index);
-  goster(liste[index]);
+function sinifDegisti(){
+ hafta.innerHTML='<option value="">Hafta seçiniz</option>'; hafta.disabled=true;
+ const liste=planlar.filter(x=>x.ders==="Beden Eğitimi ve Spor" && x.sinif==="9. Sınıf");
+ if(!liste.length)return;
+ liste.forEach((x,i)=>{const o=document.createElement("option");o.value=i;o.textContent=x.date;hafta.appendChild(o);});
+ hafta.disabled=false;
+ const aktif=aktifTarih(); let i=liste.findIndex(x=>x.start && aktif>=x.start && aktif<=x.end);
+ if(i<0)i=liste.findIndex(x=>x.start>=aktif); if(i<0)i=liste.length-1;
+ hafta.value=String(i); goster(liste[i]);
 }
-
-function goster(kayit) {
-  tarih.textContent = kayit.hafta;
-  cikti.innerHTML = '<span class="code">' + kayit.cikti.split(". ").slice(0,1)[0] + '.</span> ' +
-                    kayit.cikti.substring(kayit.cikti.indexOf(". ") + 2);
+function satir(baslik,metin){ if(!metin)return ""; return `<div class="card"><h3>${baslik}</h3><div class="pre">${metin}</div></div>`; }
+function goster(k){
+ tarih.textContent=k.date;
+ let html="";
+ html+=satir("📌 Öğrenme Çıktısı",k.outcome);
+ html+=satir("🎯 Süreç Bileşenleri",k.process);
+ html+=satir("📖 Konu / İçerik Çerçevesi",k.topic);
+ html+=satir("🔗 Programlar Arası Bileşenler",k.program);
+ html+=satir("📝 Öğrenme Kanıtları",k.evidence);
+ if(!html)html='<p class="muted">Bu hafta için plan bilgisi bulunmuyor.</p>';
+ icerik.innerHTML=html;
 }
-
-function haftaDegisti() {
-  const liste = planlar.filter(x => x.ders === ders.value && x.sinif === sinif.value);
-  const kayit = liste[Number(hafta.value)];
-  if (kayit) goster(kayit);
+function haftaDegisti(){
+ const liste=planlar.filter(x=>x.ders==="Beden Eğitimi ve Spor" && x.sinif==="9. Sınıf");
+ const k=liste[Number(hafta.value)]; if(k)goster(k);
 }
-
-ders.addEventListener("change", dersDegisti);
-sinif.addEventListener("change", sinifDegisti);
-hafta.addEventListener("change", haftaDegisti);
+ders.addEventListener("change",dersDegisti); sinif.addEventListener("change",sinifDegisti); hafta.addEventListener("change",haftaDegisti);
 </script>
 </body>
 </html>
