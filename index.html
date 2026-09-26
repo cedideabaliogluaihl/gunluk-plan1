@@ -4,98 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Plan Rehberim</title>
-
 <style>
-body{
-  font-family:Arial,sans-serif;
-  max-width:900px;
-  margin:auto;
-  padding:24px;
-  background:#f5f7fa;
-  color:#1f2937
-}
-
+body{font-family:Arial,sans-serif;max-width:900px;margin:auto;padding:24px;background:#f5f7fa;color:#1f2937}
 h1{margin-bottom:28px}
-
-label{
-  display:block;
-  margin:18px 0 8px;
-  font-weight:600
-}
-
-select{
-  width:100%;
-  padding:14px;
-  border:1px solid #d1d5db;
-  border-radius:10px;
-  background:#fff;
-  font-size:16px
-}
-
-.box{
-  margin-top:24px;
-  padding:22px;
-  background:#fff;
-  border-radius:14px;
-  border:1px solid #e5e7eb
-}
-
-.card{
-  margin-top:16px;
-  padding:16px;
-  background:#f8fafc;
-  border-radius:10px;
-  border-left:4px solid #2563eb
-}
-
+label{display:block;margin:18px 0 8px;font-weight:600}
+select{width:100%;padding:14px;border:1px solid #d1d5db;border-radius:10px;background:#fff;font-size:16px}
+.box{margin-top:24px;padding:22px;background:#fff;border-radius:14px;border:1px solid #e5e7eb}
+.card{margin-top:16px;padding:16px;background:#f8fafc;border-radius:10px;border-left:4px solid #2563eb}
 h2{margin-bottom:8px}
-
-h3{
-  margin-bottom:8px;
-  color:#111827
-}
-
+h3{margin-bottom:8px;color:#111827}
 .muted{color:#6b7280}
-
-.pre{
-  white-space:pre-line;
-  line-height:1.55
-}
-
-.topic-images{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-top:12px
-}
-
-.topic-images img{
-  max-width:220px;
-  max-height:180px;
-  object-fit:contain;
-  border:1px solid #e5e7eb;
-  border-radius:10px;
-  background:#fff;
-  padding:6px
-}
-
-.badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:999px;
-  background:#e5e7eb;
-  margin:3px 3px 3px 0;
-  font-size:13px
-}
+.pre{white-space:pre-line;line-height:1.55}
+.topic-images{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.topic-images img{max-width:220px;max-height:180px;object-fit:contain;border:1px solid #e5e7eb;border-radius:10px;background:#fff;padding:6px}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e5e7eb;margin:3px 3px 3px 0;font-size:13px}
+.headerline{margin-bottom:8px}
 </style>
 </head>
-
 <body>
 
 <h1>📚 Plan Rehberim</h1>
 
 <label for="ders">Ders Seçin</label>
-
 <select id="ders">
 <option value="">Ders seçiniz</option>
 <option value="Beden Eğitimi ve Spor">Beden Eğitimi ve Spor</option>
@@ -103,661 +33,356 @@ h3{
 <option value="Spor Eğitimi">Spor Eğitimi</option>
 </select>
 
-
 <label for="sinif">Sınıf Seçin</label>
-
-<select id="sinif" disabled>
-<option value="">Önce ders seçiniz</option>
-</select>
-
+<select id="sinif" disabled><option value="">Önce ders seçiniz</option></select>
 
 <label for="hafta">Hafta</label>
-
-<select id="hafta" disabled>
-<option value="">Önce ders ve sınıf seçiniz</option>
-</select>
-
+<select id="hafta" disabled><option value="">Önce ders ve sınıf seçiniz</option></select>
 
 <div class="box">
-
 <h2>📅 Seçilen Hafta</h2>
-
 <p id="tarih" class="muted">-</p>
-
-<div id="icerik">
-<p class="muted">Ders ve sınıf seçiniz.</p>
+<div id="icerik"><p class="muted">Ders ve sınıf seçiniz.</p></div>
 </div>
-
-</div>
-
 
 <script type="module">
-
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
-
   apiKey: "AIzaSyBht_lZf7Qgcq57w_68MnnXhk97_cJAy3s",
-
   authDomain: "plan-rehberim-78da9.firebaseapp.com",
-
   projectId: "plan-rehberim-78da9",
-
   storageBucket: "plan-rehberim-78da9.firebasestorage.app",
-
   messagingSenderId: "829668663885",
-
   appId: "1:829668663885:web:59c1aa19db2bb4e08c3204",
-
   measurementId: "G-7GNTCBD7L3"
 };
 
-
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
 
-
 const ders=document.getElementById("ders");
-
 const sinif=document.getElementById("sinif");
-
 const hafta=document.getElementById("hafta");
-
 const tarih=document.getElementById("tarih");
-
 const icerik=document.getElementById("icerik");
-
-
 let planlar=[];
 
-
-/* =========================================================
-   10. SINIF GÖRSELLERİ
-   ========================================================= */
-
+/* 10. sınıf görselleri */
 const konuGorselleri10 = {
-
 "2026-09-14":["images/10/image2.png"],
-
 "2026-09-21":["images/10/image3.png"],
-
 "2026-09-28":["images/10/image4.png"],
-
 "2026-10-05":["images/10/image6.png"],
-
 "2026-10-12":["images/10/image7.png"],
-
 "2026-10-19":["images/10/image8.jpeg"],
-
 "2026-10-26":["images/10/image9.png"],
-
 "2026-11-02":["images/10/image11.png"],
-
 "2026-11-09":["images/10/image13.png"],
-
 "2026-11-23":["images/10/image15.png"],
-
 "2026-11-30":["images/10/image17.jpeg"],
-
 "2026-12-07":["images/10/image19.png"],
-
 "2026-12-14":["images/10/image21.png"],
-
 "2026-12-21":["images/10/image23.png"],
-
 "2026-12-28":["images/10/image25.png"],
-
 "2027-01-04":["images/10/image27.png"],
-
 "2027-01-11":["images/10/image29.png"],
-
 "2027-01-18":["images/10/image31.png"],
-
 "2027-02-08":["images/10/image32.png"],
-
 "2027-02-15":["images/10/image34.png"],
-
 "2027-02-22":["images/10/image36.png"],
-
 "2027-03-01":["images/10/image38.png"],
-
 "2027-03-15":["images/10/image40.png"],
-
 "2027-03-22":["images/10/image42.png"],
-
 "2027-03-29":["images/10/image44.png"],
-
 "2027-04-05":["images/10/image46.png"],
-
 "2027-04-12":["images/10/image48.jpeg"],
-
 "2027-04-19":["images/10/image31.png"],
-
 "2027-04-26":["images/10/image50.png"],
-
 "2027-05-03":["images/10/image51.png"],
-
 "2027-05-10":["images/10/image52.png"],
-
 "2027-05-17":["images/10/image53.png"],
-
 "2027-05-31":["images/10/image54.png"],
-
 "2027-06-07":["images/10/image55.png"],
-
 "2027-06-14":["images/10/image56.png"],
-
 "2027-06-21":["images/10/image31.png"]
-
 };
 
-
-/* =========================================================
-   11. SINIF GÖRSELLERİ
-   Word dosyasındaki satır-görsel eşleşmelerine göre
-   hazırlanmıştır.
-   ========================================================= */
-
+/*
+  11. sınıf görselleri.
+  Burada KAREKODLAR özellikle çıkarıldı.
+  Örneğin 28-31 Aralık 2026'daki image29.png
+  Word dosyasında karekod olduğu için gösterilmeyecek.
+*/
 const konuGorselleri11 = {
-
 "2026-09-14":["images/image2.jpeg"],
-
 "2026-09-21":["images/image3.png"],
-
 "2026-09-28":["images/image5.png"],
-
+"2026-10-05":[],
 "2026-10-12":["images/image9.jpeg"],
-
 "2026-10-19":["images/image11.jpeg"],
-
 "2026-10-26":["images/image13.jpeg"],
-
 "2026-11-02":["images/image15.png"],
-
 "2026-11-09":["images/image17.png"],
-
 "2026-11-23":["images/image18.jpeg"],
-
 "2026-11-30":["images/image20.png"],
-
 "2026-12-07":["images/image22.jpeg"],
-
 "2026-12-14":["images/image24.png"],
-
 "2026-12-21":["images/image26.png"],
-
-"2026-12-28":["images/image29.png"],
-
+"2026-12-28":[],
 "2027-01-04":["images/image17.png"],
-
-"2027-01-11":["images/image31.png"],
-
+"2027-01-11":[],
 "2027-01-18":["images/image32.png"],
-
+"2027-02-08":[],
 "2027-02-15":["images/image34.jpeg"],
-
 "2027-02-22":["images/image36.jpeg"],
-
 "2027-03-01":["images/image38.png"],
-
 "2027-03-15":["images/image40.jpeg"],
-
 "2027-03-22":["images/image42.jpeg"],
-
 "2027-03-29":["images/image44.jpeg"],
-
 "2027-04-05":["images/image46.png"],
-
 "2027-04-12":["images/image17.png"],
-
 "2027-04-19":["images/image48.jpeg"],
-
-"2027-04-26":["images/image50.png"],
-
+"2027-04-26":[],
 "2027-05-03":["images/image51.png"],
-
 "2027-05-10":["images/image53.png"],
-
 "2027-05-17":["images/image55.png"],
-
-"2027-05-24":["images/image58.png"],
-
+"2027-05-24":[],
 "2027-05-31":["images/image59.jpeg"],
-
 "2027-06-07":["images/image17.png"],
-
 "2027-06-14":["images/image18.jpeg"],
-
 "2027-06-21":["images/image61.jpeg"]
-
 };
 
+function ilkDeger(k,alanlar){
+  for(const alan of alanlar){
+    if(k[alan]!==undefined && k[alan]!==null && String(k[alan]).trim()!==""){
+      return k[alan];
+    }
+  }
+  return "";
+}
 
-/* =========================================================
-   AKTİF HAFTA
-   ========================================================= */
+function escapeHtml(text){
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
 function aktifTarih(){
-
  const now=new Date();
-
  const day=now.getDay();
-
  const monday=new Date(now);
-
- monday.setDate(
-   now.getDate()-(day===0?6:day-1)
- );
-
+ monday.setDate(now.getDate()-(day===0?6:day-1));
  monday.setHours(0,0,0,0);
-
  return monday.toISOString().slice(0,10);
 }
 
-
-/* =========================================================
-   FIRESTORE VERİLERİNİ YÜKLE
-   ========================================================= */
-
 async function verileriYukle(){
-
  try{
-
-   const snapshot=await getDocs(
-     collection(db,"Plan")
-   );
-
-   planlar=snapshot.docs.map(
-     doc=>({
-       id:doc.id,
-       ...doc.data()
-     })
-   );
-
+   const snapshot=await getDocs(collection(db,"Plan"));
+   planlar=snapshot.docs.map(doc=>({id:doc.id,...doc.data()}));
 
    if(!planlar.length){
-
-     icerik.innerHTML=
-       '<p class="muted">Firestore\'da plan bulunamadı.</p>';
-
+     icerik.innerHTML='<p class="muted">Firestore\'da plan bulunamadı.</p>';
      return;
    }
 
-
-   icerik.innerHTML=
-     '<p class="muted">Veriler yüklendi. Ders ve sınıf seçiniz.</p>';
-
+   icerik.innerHTML='<p class="muted">Veriler yüklendi. Ders ve sınıf seçiniz.</p>';
  }catch(error){
-
    console.error(error);
-
-   icerik.innerHTML=
-     '<p class="muted">Planlar yüklenemedi. Firestore güvenlik kurallarını kontrol edin.</p>';
+   icerik.innerHTML='<p class="muted">Planlar yüklenemedi. Firestore güvenlik kurallarını kontrol edin.</p>';
  }
 }
 
-
-/* =========================================================
-   DERS DEĞİŞTİ
-   ========================================================= */
-
 function dersDegisti(){
-
- sinif.innerHTML=
-   '<option value="">Sınıf seçiniz</option>';
-
- hafta.innerHTML=
-   '<option value="">Önce sınıf seçiniz</option>';
-
+ sinif.innerHTML='<option value="">Sınıf seçiniz</option>';
+ hafta.innerHTML='<option value="">Önce sınıf seçiniz</option>';
  sinif.disabled=!ders.value;
-
  hafta.disabled=true;
-
  tarih.textContent="-";
-
- icerik.innerHTML=
-   '<p class="muted">Sınıf seçiniz.</p>';
-
+ icerik.innerHTML='<p class="muted">Sınıf seçiniz.</p>';
 
  if(!ders.value)return;
 
-
- const siniflar=[
-
-   ...new Set(
-
-     planlar
-
-       .filter(x=>x.ders===ders.value)
-
-       .map(x=>x.sinif)
-
-   )
-
- ].sort();
-
+ const siniflar=[...new Set(
+   planlar.filter(x=>x.ders===ders.value).map(x=>x.sinif)
+ )].sort();
 
  siniflar.forEach(s=>{
-
    const o=document.createElement("option");
-
    o.value=s;
-
    o.textContent=s;
-
    sinif.appendChild(o);
-
  });
-
 
  if(!siniflar.length){
-
-   sinif.innerHTML=
-     '<option value="">Bu ders için plan bulunamadı</option>';
-
-   return;
+   sinif.innerHTML='<option value="">Bu ders için plan bulunamadı</option>';
  }
-
 }
 
-
-/* =========================================================
-   SINIF DEĞİŞTİ
-   ========================================================= */
-
 function sinifDegisti(){
-
- hafta.innerHTML=
-   '<option value="">Hafta seçiniz</option>';
-
+ hafta.innerHTML='<option value="">Hafta seçiniz</option>';
  hafta.disabled=true;
 
-
- const liste=
-
-   planlar
-
-   .filter(
-     x=>
-       x.ders===ders.value &&
-       x.sinif===sinif.value
-   )
-
-   .sort(
-     (a,b)=>
-       (a.start||"").localeCompare(b.start||"")
-   );
-
+ const liste=planlar
+   .filter(x=>x.ders===ders.value && x.sinif===sinif.value)
+   .sort((a,b)=>(a.start||"").localeCompare(b.start||""));
 
  if(!liste.length){
-
-   icerik.innerHTML=
-     '<p class="muted">Bu sınıf için plan bulunamadı.</p>';
-
+   icerik.innerHTML='<p class="muted">Bu sınıf için plan bulunamadı.</p>';
    return;
  }
 
-
  liste.forEach((x,i)=>{
-
    const o=document.createElement("option");
-
    o.value=i;
-
-   o.textContent=x.date;
-
+   o.textContent=ilkDeger(x,["date","tarih"]) || `Hafta ${i+1}`;
    hafta.appendChild(o);
-
  });
-
 
  hafta.disabled=false;
 
-
  const aktif=aktifTarih();
-
- let i=
-
-   liste.findIndex(
-     x=>
-       x.start &&
-       aktif>=x.start &&
-       aktif<=x.end
-   );
-
-
- if(i<0)
-
-   i=liste.findIndex(
-     x=>x.start>=aktif
-   );
-
-
- if(i<0)
-
-   i=liste.length-1;
-
+ let i=liste.findIndex(x=>x.start && aktif>=x.start && aktif<=x.end);
+ if(i<0)i=liste.findIndex(x=>x.start>=aktif);
+ if(i<0)i=liste.length-1;
 
  hafta.value=String(i);
-
  goster(liste[i]);
-
 }
-
-
-/* =========================================================
-   KART OLUŞTUR
-   ========================================================= */
 
 function satir(baslik,metin){
-
- if(!metin)return "";
-
- return `
-
- <div class="card">
-
-   <h3>${baslik}</h3>
-
-   <div class="pre">${metin}</div>
-
- </div>
-
- `;
-
+ if(metin===undefined || metin===null || String(metin).trim()==="") return "";
+ return `<div class="card"><h3>${baslik}</h3><div class="pre">${escapeHtml(metin)}</div></div>`;
 }
 
-
-/* =========================================================
-   HAFTAYI GÖSTER
-   ========================================================= */
-
 function goster(k){
+ tarih.textContent=ilkDeger(k,["date","tarih"]) || "-";
 
- tarih.textContent=k.date || "-";
+ const dersAdi=k.ders || "";
+ const sinifAdi=k.sinif || "";
 
+ /*
+   EN ÖNEMLİ DÜZELTME:
+   11. sınıfta alan "kazanımlar/kazanım" olabilir.
+   10. sınıfta ise "outcome" kullanılabilir.
+ */
+ const kazanim=ilkDeger(k,[
+   "kazanımlar",
+   "kazanım",
+   "kazanımlar_text",
+   "kazanım_text",
+   "achievement",
+   "achievements"
+ ]);
+
+ const outcome=ilkDeger(k,[
+   "outcome",
+   "öğrenme_çıktısı",
+   "öğrenme çıktısı",
+   "ogrenme_ciktisi",
+   "learningOutcome"
+ ]);
+
+ const hedef=kazanim || outcome;
 
  let html="";
 
-
- html+=satir(
-   "📌 Öğrenme Çıktısı",
-   k.outcome
- );
-
-
- html+=satir(
-   "🎯 Süreç Bileşenleri",
-   k.process
- );
-
-
- html+=satir(
-   "📖 Konu / İçerik Çerçevesi",
-   k.topic
- );
-
+ if(dersAdi || sinifAdi){
+   html+=`<div class="headerline">
+     ${dersAdi ? `<span class="badge">Ders: ${escapeHtml(dersAdi)}</span>` : ""}
+     ${sinifAdi ? `<span class="badge">Sınıf: ${escapeHtml(sinifAdi)}</span>` : ""}
+     ${kazanim ? `<span class="badge">Kazanım</span>` : outcome ? `<span class="badge">Öğrenme Çıktısı</span>` : ""}
+   </div>`;
+ }
 
  /*
-    SINIFA GÖRE GÖRSEL SEÇ
+   KAZANIM / ÖĞRENME ÇIKTISI EN ÜSTTE
  */
+ if(hedef){
+   html+=satir(kazanim ? "🎯 Kazanımlar" : "📌 Öğrenme Çıktısı",hedef);
+ }
+
+ html+=satir("🏃 Öğrenme Alanı",ilkDeger(k,[
+   "öğrenme_alani","öğrenme alanı","ogrenme_alani","learningArea","theme","tema"
+ ]));
+
+ html+=satir("🔹 Alt Öğrenme Alanı",ilkDeger(k,[
+   "alt_öğrenme_alani","alt öğrenme alanı","alt_ogrenme_alani","subLearningArea"
+ ]));
+
+ html+=satir("🎯 Süreç Bileşenleri",ilkDeger(k,[
+   "process","süreç_bileşenleri","süreç bileşenleri","surec_bilesenleri"
+ ]));
+
+ html+=satir("📖 Etkinlik / Konu / İçerik",ilkDeger(k,[
+   "topic","konu","konu_icerik","konu / içerik çerçevesi",
+   "etkinlikler","etkinlikler_konu_kavramlar","activity"
+ ]));
 
  let gorseller=[];
 
-
  if(k.sinif==="10. Sınıf"){
-
-   gorseller=
-
-     k.start
-       ? (konuGorselleri10[k.start] || [])
-       : [];
-
+   gorseller=konuGorselleri10[k.start] || [];
  }
 
-
- else if(k.sinif==="11. Sınıf"){
-
-   gorseller=
-
-     k.start
-       ? (konuGorselleri11[k.start] || [])
-       : [];
-
+ if(k.sinif==="11. Sınıf"){
+   gorseller=konuGorselleri11[k.start] || [];
  }
-
-
- /*
-    GÖRSELLERİ GÖSTER
- */
 
  if(gorseller.length){
-
-   html+=`
-
-   <div class="card">
-
+   html+=`<div class="card">
      <h3>🖼️ Konu Görseli</h3>
-
      <div class="topic-images">
-
        ${gorseller.map(src=>`
-
-         <img
-
-           src="${src}"
-
-           alt="Konu görseli"
-
-           loading="lazy"
-
-           onerror="this.style.display='none'"
-
-         >
-
+         <img src="${src}" alt="Konu görseli" loading="lazy"
+              onerror="this.style.display='none'">
        `).join("")}
-
      </div>
-
-   </div>
-
-   `;
-
+   </div>`;
  }
 
+ html+=satir("🔗 Programlar Arası Bileşenler",ilkDeger(k,[
+   "program","programlar_arasi_bilesenler","programlar arası bileşenler"
+ ]));
 
- html+=satir(
-   "🔗 Programlar Arası Bileşenler",
-   k.program
- );
+ html+=satir("📝 Öğrenme Kanıtları",ilkDeger(k,[
+   "evidence","öğrenme_kanıtları","öğrenme kanıtları"
+ ]));
 
+ html+=satir("👨‍🏫 Öğrenme-Öğretme Yöntem ve Teknikleri",ilkDeger(k,[
+   "yöntem_teknik","yöntem ve teknik",
+   "öğrenme_öğretme_yöntem_ve_teknikleri",
+   "ogrenme_ogretme_yontem_ve_teknikleri","method"
+ ]));
 
- html+=satir(
-   "📝 Öğrenme Kanıtları",
-   k.evidence
- );
-
-
- if(!html)
-
-   html=
-     '<p class="muted">Bu hafta için plan bilgisi bulunmuyor.</p>';
-
+ if(!html){
+   html='<p class="muted">Bu hafta için plan bilgisi bulunmuyor.</p>';
+ }
 
  icerik.innerHTML=html;
-
 }
-
-
-/* =========================================================
-   HAFTA DEĞİŞTİ
-   ========================================================= */
 
 function haftaDegisti(){
-
- const liste=
-
-   planlar
-
-   .filter(
-     x=>
-       x.ders===ders.value &&
-       x.sinif===sinif.value
-   )
-
-   .sort(
-     (a,b)=>
-       (a.start||"").localeCompare(b.start||"")
-   );
-
+ const liste=planlar
+   .filter(x=>x.ders===ders.value && x.sinif===sinif.value)
+   .sort((a,b)=>(a.start||"").localeCompare(b.start||""));
 
  const k=liste[Number(hafta.value)];
-
-
- if(k)
-
-   goster(k);
-
+ if(k)goster(k);
 }
 
-
-/* =========================================================
-   OLAYLAR
-   ========================================================= */
-
-ders.addEventListener(
-  "change",
-  dersDegisti
-);
-
-sinif.addEventListener(
-  "change",
-  sinifDegisti
-);
-
-hafta.addEventListener(
-  "change",
-  haftaDegisti
-);
-
-
-/* =========================================================
-   BAŞLAT
-   ========================================================= */
+ders.addEventListener("change",dersDegisti);
+sinif.addEventListener("change",sinifDegisti);
+hafta.addEventListener("change",haftaDegisti);
 
 verileriYukle();
 
 </script>
-
 </body>
 </html>
