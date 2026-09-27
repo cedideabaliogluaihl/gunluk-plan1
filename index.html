@@ -6,47 +6,58 @@
 <title>Plan Rehberim</title>
 <style>
 body{font-family:Arial,sans-serif;max-width:900px;margin:auto;padding:24px;background:#f5f7fa;color:#1f2937}
-h1{margin-bottom:28px}
-label{display:block;margin:18px 0 8px;font-weight:600}
+h1{margin-bottom:28px}label{display:block;margin:18px 0 8px;font-weight:600}
 select{width:100%;padding:14px;border:1px solid #d1d5db;border-radius:10px;background:#fff;font-size:16px}
 .box{margin-top:24px;padding:22px;background:#fff;border-radius:14px;border:1px solid #e5e7eb}
 .card{margin-top:16px;padding:16px;background:#f8fafc;border-radius:10px;border-left:4px solid #2563eb}
-h2{margin-bottom:8px}
-h3{margin-bottom:8px;color:#111827}
-.muted{color:#6b7280}
-.pre{white-space:pre-line;line-height:1.55}
-.topic-images{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
-.topic-images img{max-width:220px;max-height:180px;object-fit:contain;border:1px solid #e5e7eb;border-radius:10px;background:#fff;padding:6px;cursor:pointer}
-.topic-images img:hover{transform:scale(1.02)}
+h2{margin-bottom:8px}h3{margin-bottom:8px;color:#111827}.muted{color:#6b7280}.pre{white-space:pre-line;line-height:1.55}
+.topic-images{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.topic-images img{max-width:220px;max-height:180px;object-fit:contain;border:1px solid #e5e7eb;border-radius:10px;background:#fff;padding:6px;cursor:pointer}.topic-images img:hover{transform:scale(1.02)}
 .status{margin-top:12px;padding:10px 12px;border-radius:8px;background:#eef6ff;color:#1d4ed8}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:9px;padding:11px 15px;font-size:14px;font-weight:600;cursor:pointer}.btn-primary{background:#2563eb;color:#fff}.btn-secondary{background:#e5e7eb;color:#111827}.btn-success{background:#15803d;color:#fff}.btn:disabled{opacity:.55;cursor:not-allowed}
+.daily-modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}.daily-modal.open{display:flex}.daily-window{width:min(980px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.daily-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:1px solid #e5e7eb;padding-bottom:14px}.daily-header h2{margin:0}.close{border:0;background:#e5e7eb;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:18px}
+.daily-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:14px 0}.meta-box{background:#f8fafc;border-radius:10px;padding:12px}.meta-box strong{display:block;margin-bottom:4px}
+.timeline{margin-top:18px}.step{display:grid;grid-template-columns:90px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid #e5e7eb}.step:last-child{border-bottom:0}.step-time{font-weight:700;color:#2563eb}.step h4{margin:0 0 6px}.step p{margin:0;line-height:1.55}.criteria{margin:8px 0 0;padding-left:20px}.criteria li{margin:6px 0}.daily-footer{margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb}
+@media print{body{max-width:none;background:#fff;padding:0}.no-print{display:none!important}.daily-modal{position:static;background:#fff;display:block;padding:0}.daily-window{max-height:none;box-shadow:none;border-radius:0;padding:0}.daily-header .close{display:none}.daily-footer{break-inside:avoid}.step{break-inside:avoid}}
 </style>
 </head>
 <body>
-
 <h1>📚 Plan Rehberim</h1>
 
 <label for="ders">Ders Seçin</label>
 <select id="ders">
-  <option value="">Ders seçiniz</option>
-  <option value="Beden Eğitimi ve Spor">Beden Eğitimi ve Spor</option>
-  <option value="Spor ve Fiziki Etkinlikler">Spor ve Fiziki Etkinlikler</option>
-  <option value="Spor Eğitimi">Spor Eğitimi</option>
+<option value="">Ders seçiniz</option>
+<option value="Beden Eğitimi ve Spor">Beden Eğitimi ve Spor</option>
+<option value="Spor ve Fiziki Etkinlikler">Spor ve Fiziki Etkinlikler</option>
+<option value="Spor Eğitimi">Spor Eğitimi</option>
 </select>
 
 <label for="sinif">Sınıf Seçin</label>
-<select id="sinif" disabled>
-  <option value="">Önce ders seçiniz</option>
-</select>
+<select id="sinif" disabled><option value="">Önce ders seçiniz</option></select>
 
 <label for="hafta">Hafta</label>
-<select id="hafta" disabled>
-  <option value="">Önce ders ve sınıf seçiniz</option>
-</select>
+<select id="hafta" disabled><option value="">Önce ders ve sınıf seçiniz</option></select>
 
 <div class="box">
-  <h2>📅 Seçilen Hafta</h2>
-  <p id="tarih" class="muted">-</p>
-  <div id="icerik"><p class="muted">Ders ve sınıf seçiniz.</p></div>
+<h2>📅 Seçilen Hafta</h2>
+<p id="tarih" class="muted">-</p>
+<div id="icerik"><p class="muted">Ders ve sınıf seçiniz.</p></div>
+<div id="haftaActions" class="actions"></div>
+</div>
+
+<div id="dailyModal" class="daily-modal" aria-hidden="true">
+ <div class="daily-window" id="dailyWindow">
+  <div class="daily-header">
+   <div><h2>📝 Günlük Ders Planı</h2><p id="dailySubtitle" class="muted"></p></div>
+   <button class="close no-print" id="closeDaily">✕</button>
+  </div>
+  <div id="dailyContent"></div>
+  <div class="actions no-print">
+    <button class="btn btn-primary" id="printDaily">🖨️ Yazdır / PDF Kaydet</button>
+    <button class="btn btn-success" id="downloadDaily">⬇️ Word olarak indir</button>
+    <button class="btn btn-secondary" id="closeDaily2">Kapat</button>
+  </div>
+ </div>
 </div>
 
 <script type="module">
@@ -63,291 +74,78 @@ const firebaseConfig = {
   measurementId: "G-7GNTCBD7L3"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const ders=document.getElementById("ders"),sinif=document.getElementById("sinif"),hafta=document.getElementById("hafta"),tarih=document.getElementById("tarih"),icerik=document.getElementById("icerik"),haftaActions=document.getElementById("haftaActions");
+const dailyModal=document.getElementById("dailyModal"),dailyContent=document.getElementById("dailyContent"),dailySubtitle=document.getElementById("dailySubtitle");
+let planlar=[],gunlukPlanlar=[],seciliHafta=null,seciliGunluk=null;
 
-const ders = document.getElementById("ders");
-const sinif = document.getElementById("sinif");
-const hafta = document.getElementById("hafta");
-const tarih = document.getElementById("tarih");
-const icerik = document.getElementById("icerik");
+const eski10Gorselleri={
+"2026-09-14":["images/10/image2.png"],"2026-09-21":["images/10/image3.png"],"2026-09-28":["images/10/image4.png"],"2026-10-05":["images/10/image6.png"],"2026-10-12":["images/10/image7.png"],"2026-10-19":["images/10/image8.jpeg"],"2026-10-26":["images/10/image9.png"],"2026-11-02":["images/10/image11.png"],"2026-11-09":["images/10/image13.png"],"2026-11-23":["images/10/image15.png"],"2026-11-30":["images/10/image17.jpeg"],"2026-12-07":["images/10/image19.png"],"2026-12-14":["images/10/image21.png"],"2026-12-21":["images/10/image23.png"],"2026-12-28":["images/10/image25.png"],"2027-01-04":["images/10/image27.png"],"2027-01-11":["images/10/image29.png"],"2027-01-18":["images/10/image31.png"],"2027-02-08":["images/10/image32.png"],"2027-02-15":["images/10/image34.png"],"2027-02-22":["images/10/image36.png"],"2027-03-01":["images/10/image38.png"],"2027-03-15":["images/10/image40.png"],"2027-03-22":["images/10/image42.png"],"2027-03-29":["images/10/image44.png"],"2027-04-05":["images/10/image46.png"],"2027-04-12":["images/10/image48.jpeg"],"2027-04-19":["images/10/image31.png"],"2027-04-26":["images/10/image50.png"],"2027-05-03":["images/10/image51.png"],"2027-05-10":["images/10/image52.png"],"2027-05-17":["images/10/image53.png"],"2027-05-31":["images/10/image54.png"],"2027-06-07":["images/10/image55.png"],"2027-06-14":["images/10/image56.png"],"2027-06-21":["images/10/image31.png"]};
 
-let planlar = [];
-
-/*
-  10. sınıfın daha önce yüklenmiş görselleri.
-  Bunlar korunuyor.
-*/
-const eski10Gorselleri = {
-  "2026-09-14":["images/10/image2.png"],
-  "2026-09-21":["images/10/image3.png"],
-  "2026-09-28":["images/10/image4.png"],
-  "2026-10-05":["images/10/image6.png"],
-  "2026-10-12":["images/10/image7.png"],
-  "2026-10-19":["images/10/image8.jpeg"],
-  "2026-10-26":["images/10/image9.png"],
-  "2026-11-02":["images/10/image11.png"],
-  "2026-11-09":["images/10/image13.png"],
-  "2026-11-23":["images/10/image15.png"],
-  "2026-11-30":["images/10/image17.jpeg"],
-  "2026-12-07":["images/10/image19.png"],
-  "2026-12-14":["images/10/image21.png"],
-  "2026-12-21":["images/10/image23.png"],
-  "2026-12-28":["images/10/image25.png"],
-  "2027-01-04":["images/10/image27.png"],
-  "2027-01-11":["images/10/image29.png"],
-  "2027-01-18":["images/10/image31.png"],
-  "2027-02-08":["images/10/image32.png"],
-  "2027-02-15":["images/10/image34.png"],
-  "2027-02-22":["images/10/image36.png"],
-  "2027-03-01":["images/10/image38.png"],
-  "2027-03-15":["images/10/image40.png"],
-  "2027-03-22":["images/10/image42.png"],
-  "2027-03-29":["images/10/image44.png"],
-  "2027-04-05":["images/10/image46.png"],
-  "2027-04-12":["images/10/image48.jpeg"],
-  "2027-04-19":["images/10/image31.png"],
-  "2027-04-26":["images/10/image50.png"],
-  "2027-05-03":["images/10/image51.png"],
-  "2027-05-10":["images/10/image52.png"],
-  "2027-05-17":["images/10/image53.png"],
-  "2027-05-31":["images/10/image54.png"],
-  "2027-06-07":["images/10/image55.png"],
-  "2027-06-14":["images/10/image56.png"],
-  "2027-06-21":["images/10/image31.png"]
-};
-
-/*
-  11. sınıf Beden Eğitimi ve Spor planının KAZANIMLARI.
-  Kaynak: kullanıcının yüklediği 11. sınıf yıllık plan.
-  Firestore kaydında kazanım alanı eksikse burada tarih üzerinden tamamlanır.
-*/
-const kazanım11 = {"2026-09-14":"11.1.1.1.1. Serbest hareketleri grup hâlinde uygular 11.1.1.3.1. Oyun yoluyla stratejiler geliştirerek uygular.","2026-09-21":"11.2.2.2.1. Fiziksel gelişimi hakkında bilgi almak için periyodik olarak testlere katılır. 11.2.2.2.2. Kendisine uygun fiziksel etkinlik hedefleri belirler.","2026-09-28":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.4. Seçili spor dalına özgü hareketleri açıklar. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2026-10-05":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.4. Seçili spor dalına özgü hareketleri açıklar. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2026-10-12":"11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.1.2.1.6. Seçili spor dalına özgü birleşik hareketleri uygular. 11.2.4.2.1. Dopingin sporcular üzerindeki olumsuz etkilerini açıklar. 11.2.4.2.2. Sporda dürüst olmanın gerekliliğini açıklar. 11.2.4.4.1. Centilmenlik kavramını açıklar. 11.2.4.4.2. Sporda centilmenliğin gerekliliğini ifade eder.","2026-10-19":"11.1.3.1.1. Seçili spor dalına özgü savunma hareketlerini uygular. 11.1.3.1.2. Seçili spor dalına özgü hücum hareketlerini uygular. 11.2.2.1.1. Serbest zaman etkinliklerinin birey açısından yararlarını açıklar. 11.2.2.1.2. Serbest zaman etkinliklerinin sosyal hayata etkisini açıklar.","2026-10-26":"11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.6. Seçili spor dalına özgü birleşik hareketleri uygular. 11.1.2.1.7. Seçili spor dalına özgü etkinliklerde kendisi ve çevresi ile ilgili güvenlik önlemlerini alır. 11.2.3.1.1. Atatürk’ün ilgilendiği spor dallarını tanıtan sunu hazırlar. 11.2.3.2.1. Belirli gün ve haftalarla ilgili düzenlenen etkinlik ve törenlere katılır.","2026-11-02":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2026-11-09":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2026-11-23":"11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.6. Seçili spor dalına özgü birleşik hareketleri uygular. 11.1.2.1.7. Seçili spor dalına özgü etkinliklerde kendisi ve çevresi ile ilgili güvenlik önlemleri alır 11.2.2.1.2. Serbest zaman etkinliklerinin sosyal hayata etkisini açıklar.","2026-11-30":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2026-12-07":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.10. Seçili spor etkinliklerinde empati kurarak hareket eder.","2026-12-14":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.1.2.1.11. Seçili spor etkinliklerinde araçları amacına uygun ve doğru kullanır.","2026-12-21":"11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.1.2.1.8. Seçili spor etkinliklerinde dürüstlük ve adil olma ilkelerini açıklar.","2026-12-28":"11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.1.2.1.6. Seçili spor dalına özgü birleşik hareketleri uygular.","2027-01-04":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2027-01-11":"11.1.1.2.1. Fiziksel etkinlikleri koordineli bir şekilde yapar 11.1.1.2.2. Verilen ritme uygun hareketi kompozisyon içerisinde yapar. 11.1.2.1.6. Seçili spor dalına özgü birleşik hareketleri uygular.","2027-01-18":"11.2.4.3.1. Uluslararası spor organizasyonlarının amaçlarını açıklar. 11.2.4.3.2. Olimpiyat oyunları ve spor organizasyonlarının ev sahibi ülkeler üzerindeki etkilerini açıklar.","2027-02-08":"11.2.4.1.1. Sporun toplum üzerindeki etkisini açıklar.","2027-02-15":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.11. Seçili spor etkinliklerinde kendine güven duygusunun önemini açıklar.","2027-02-22":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.11. Seçili spor etkinliklerinde araçları amacına uygun ve doğru kullanır.","2027-03-01":"11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.1.2.1.12. Seçili spor etkinliklerinde araçları amacına uygun ve doğru kullanır.","2027-03-15":"11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.4. Seçili spor dalına özgü hareketleri açıklar. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2027-03-22":"11.1.3.1.1. Seçili spor dalına özgü savunma hareketlerini uygular. 11.1.3.1.2. Seçili spor dalına özgü hücum hareketlerini uygular. 11.2.2.3.2. Beden ve ruh sağlığını olumsuz etkileyen alışkanlık ve bağımlılıkların zararlarını açıklar.","2027-03-29":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.1.2.1.8. Seçili spor etkinliklerinde takım ruhu ilkelerini uygular.","2027-04-05":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.2.2.3.1. Sağlıklı beslenmenin temel ilkelerini açıklar.","2027-04-12":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2027-04-19":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.2.3.2.1. Belirli gün ve haftalarla ilgili düzenlenen etkinlik ve törenlere katılır.","2027-04-26":"11.2.2.2.1. Fiziksel gelişimi hakkında bilgi almak için periyodik olarak testlere katılır. 11.2.2.2.2. Kendisine uygun fiziksel etkinlik hedefleri belirler.","2027-05-03":"11.1.3.1.1. Seçili spor dalına özgü savunma hareketlerini uygular. 11.1.3.1.2. Seçili spor dalına özgü hücum hareketlerini uygular. 11.2.1.1.1. Fiziksel uygunluğu geliştirmek için düzenli fiziksel etkinlikler yapar.","2027-05-10":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.3. Seçili spor dalına özgü kuralları uygular. 11.1.2.1.4. Seçili spor dalına özgü hareketleri açıklar. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2027-05-17":"11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.1.2.1.6. Seçili spor dalına özgü birleşik hareketleri uygular. 11.2.3.2.1. Belirli gün ve haftalarla ilgili düzenlenen etkinlik ve törenlere katılır.","2027-05-24":"11.1.3.1.2. Seçili spor dalına özgü hücum hareketlerini uygular.","2027-05-31":"11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular. 11.1.2.1.6. Seçili spor dalına özgü birleşik hareketleri uygular.","2027-06-07":"11.1.2.1.1. Seçili spor dalına özgü ısınma hareketlerini uygular. 11.1.2.1.2. Seçili spor dalına özgü kuralları açıklar. 11.1.2.1.5. Seçili spor dalına özgü temel hareketleri uygular.","2027-06-14":"11.2.2.1.1. Serbest zaman etkinliklerinin birey açısından yararlarını açıklar.","2027-06-21":"11.2.2.1.2. Serbest zaman etkinliklerinin sosyal hayata etkisini açıklar."};
-
-function escapeHtml(value){
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-function aktifTarih(){
-  const now = new Date();
-  const day = now.getDay();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
-  monday.setHours(0,0,0,0);
-  return monday.toISOString().slice(0,10);
-}
+function aktifTarih(){const now=new Date(),day=now.getDay(),m=new Date(now);m.setDate(now.getDate()-(day===0?6:day-1));m.setHours(0,0,0,0);return m.toISOString().slice(0,10)}
+function escapeHtml(v){return String(v??"").replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function satir(baslik,metin){if(!metin)return "";return `<div class="card"><h3>${baslik}</h3><div class="pre">${escapeHtml(metin)}</div></div>`}
+function gorselleriBul(k){if(Array.isArray(k.images)&&k.images.length)return k.images;if(k.sinif==="10. Sınıf"&&k.start)return eski10Gorselleri[k.start]||[];return []}
+function ogrenmeCiktisiBul(k){return k.outcome||k.sonuc||k["sonuç"]||k.kazanim||k["kazanım"]||""}
 
 async function verileriYukle(){
-  try{
-    const snapshot = await getDocs(collection(db,"Plan"));
-    planlar = snapshot.docs.map(doc => ({id:doc.id,...doc.data()}));
-
-    if(!planlar.length){
-      icerik.innerHTML='<p class="muted">Firestore\'da plan bulunamadı.</p>';
-      return;
-    }
-
-    icerik.innerHTML='<p class="status">Veriler yüklendi. Ders ve sınıf seçiniz.</p>';
-  }catch(error){
-    console.error(error);
-    icerik.innerHTML='<p class="muted">Planlar yüklenemedi. Firestore güvenlik kurallarını kontrol edin.</p>';
-  }
+ try{
+  const [planSnap,dailySnap]=await Promise.all([getDocs(collection(db,"Plan")),getDocs(collection(db,"GunlukPlan"))]);
+  planlar=planSnap.docs.map(d=>({id:d.id,...d.data()}));
+  gunlukPlanlar=dailySnap.docs.map(d=>({id:d.id,...d.data()}));
+  if(!planlar.length){icerik.innerHTML='<p class="muted">Firestore\'da yıllık plan bulunamadı.</p>';return}
+  icerik.innerHTML='<p class="status">Veriler yüklendi. Ders ve sınıf seçiniz.</p>';
+ }catch(error){console.error(error);icerik.innerHTML='<p class="muted">Planlar yüklenemedi. Firestore güvenlik kurallarını kontrol edin.</p>'}
 }
-
 function dersDegisti(){
-  sinif.innerHTML='<option value="">Sınıf seçiniz</option>';
-  hafta.innerHTML='<option value="">Önce sınıf seçiniz</option>';
-  sinif.disabled=!ders.value;
-  hafta.disabled=true;
-  tarih.textContent="-";
-  icerik.innerHTML='<p class="muted">Sınıf seçiniz.</p>';
-
-  if(!ders.value) return;
-
-  const siniflar=[...new Set(
-    planlar
-      .filter(x=>x.ders===ders.value)
-      .map(x=>x.sinif)
-      .filter(Boolean)
-  )].sort((a,b)=>a.localeCompare(b,"tr",{numeric:true}));
-
-  siniflar.forEach(s=>{
-    const o=document.createElement("option");
-    o.value=s;
-    o.textContent=s;
-    sinif.appendChild(o);
-  });
-
-  if(!siniflar.length){
-    sinif.innerHTML='<option value="">Bu ders için plan bulunamadı</option>';
-  }
+ sinif.innerHTML='<option value="">Sınıf seçiniz</option>';hafta.innerHTML='<option value="">Önce sınıf seçiniz</option>';sinif.disabled=!ders.value;hafta.disabled=true;tarih.textContent="-";icerik.innerHTML='<p class="muted">Sınıf seçiniz.</p>';haftaActions.innerHTML="";seciliHafta=null;
+ if(!ders.value)return;
+ const siniflar=[...new Set(planlar.filter(x=>x.ders===ders.value).map(x=>x.sinif).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"tr",{numeric:true}));
+ siniflar.forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=s;sinif.appendChild(o)});
+ if(!siniflar.length)sinif.innerHTML='<option value="">Bu ders için plan bulunamadı</option>';
 }
-
 function sinifDegisti(){
-  hafta.innerHTML='<option value="">Hafta seçiniz</option>';
-  hafta.disabled=true;
-
-  const liste=planlar
-    .filter(x=>x.ders===ders.value && x.sinif===sinif.value)
-    .sort((a,b)=>(a.start||"").localeCompare(b.start||""));
-
-  if(!liste.length){
-    icerik.innerHTML='<p class="muted">Bu sınıf için plan bulunamadı.</p>';
-    return;
-  }
-
-  liste.forEach((x,i)=>{
-    const o=document.createElement("option");
-    o.value=i;
-    o.textContent=x.date || x.start || ("Hafta "+(i+1));
-    hafta.appendChild(o);
-  });
-
-  hafta.disabled=false;
-
-  const aktif=aktifTarih();
-  let i=liste.findIndex(x=>x.start && aktif>=x.start && aktif<=x.end);
-  if(i<0) i=liste.findIndex(x=>x.start>=aktif);
-  if(i<0) i=liste.length-1;
-
-  hafta.value=String(i);
-  goster(liste[i]);
+ hafta.innerHTML='<option value="">Hafta seçiniz</option>';hafta.disabled=true;haftaActions.innerHTML="";
+ const liste=planlar.filter(x=>x.ders===ders.value&&x.sinif===sinif.value).sort((a,b)=>(a.start||"").localeCompare(b.start||""));
+ if(!liste.length){icerik.innerHTML='<p class="muted">Bu sınıf için plan bulunamadı.</p>';return}
+ liste.forEach((x,i)=>{const o=document.createElement("option");o.value=i;o.textContent=x.date||x.start||(`Hafta ${i+1}`);hafta.appendChild(o)});hafta.disabled=false;
+ const aktif=aktifTarih();let i=liste.findIndex(x=>x.start&&aktif>=x.start&&aktif<=x.end);if(i<0)i=liste.findIndex(x=>x.start>=aktif);if(i<0)i=liste.length-1;hafta.value=String(i);goster(liste[i]);
 }
-
-function satir(baslik,metin){
-  if(metin===undefined || metin===null || String(metin).trim()==="") return "";
-  return `<div class="card"><h3>${baslik}</h3><div class="pre">${escapeHtml(metin)}</div></div>`;
-}
-
-/*
-  Müfredat yapısına göre başlık:
-  5, 6, 9, 10 -> Öğrenme Çıktısı
-  11, 12 Beden Eğitimi -> Kazanım
-  11, 12 Spor Eğitimi -> Kazanım
-*/
-function alanTuru(k){
-  const sinifAdi = k.sinif || "";
-  if(["5. Sınıf","6. Sınıf","9. Sınıf","10. Sınıf"].includes(sinifAdi)){
-    return "ogrenme";
-  }
-  if(["11. Sınıf","12. Sınıf"].includes(sinifAdi)){
-    return "kazanim";
-  }
-  return "ogrenme";
-}
-
-function anaAlanMetni(k){
-  const tur = alanTuru(k);
-
-  const outcome =
-    k.outcome ||
-    k.sonuc ||
-    k["sonuç"] ||
-    k["öğrenme_çıktısı"] ||
-    k["öğrenme çıktısı"] ||
-    k.ogrenme_ciktisi ||
-    "";
-
-  const kazanim =
-    k.kazanim ||
-    k["kazanım"] ||
-    k.kazanımlar ||
-    k["kazanımlar"] ||
-    k.achievement ||
-    k.achievements ||
-    "";
-
-  // 11. sınıf Beden Eğitimi için Firestore'da kazanım alanı eksikse
-  // kaynak plandan tarih bazlı kazanımı kullan.
-  if(tur === "kazanim"){
-    if(kazanim) return kazanim;
-
-    if(k.sinif === "11. Sınıf" &&
-       k.ders === "Beden Eğitimi ve Spor" &&
-       k.start &&
-       kazanım11[k.start]){
-      return kazanım11[k.start];
-    }
-
-    // 12. sınıf Beden Eğitimi ve Spor ile Spor Eğitimi kayıtlarında
-    // mevcut "outcome" alanı zaten kazanım olarak tutuluyor.
-    return outcome;
-  }
-
-  return outcome || kazanim;
-}
-
-function gorselleriBul(k){
-  // Yeni planlarda Firestore'daki images alanı kullanılır.
-  if(Array.isArray(k.images) && k.images.length){
-    return k.images;
-  }
-
-  // Eski 10. sınıf kayıtlarının görselleri korunur.
-  if(k.sinif==="10. Sınıf" && k.start){
-    return eski10Gorselleri[k.start] || [];
-  }
-
-  // Görsel yüklenmemiş sınıflarda boş bırakılır.
-  return [];
-}
-
 function goster(k){
-  tarih.textContent=k.date || "-";
-
-  let html="";
-  const tur=alanTuru(k);
-  const baslik=(tur==="kazanim") ? "📌 Kazanım" : "📌 Öğrenme Çıktısı";
-
-  html += satir(baslik, anaAlanMetni(k));
-  html += satir("🎯 Süreç Bileşenleri",k.process);
-  html += satir("📖 Konu / İçerik Çerçevesi",k.topic);
-
-  const gorseller=gorselleriBul(k);
-
-  if(gorseller.length){
-    html += `<div class="card">
-      <h3>🖼️ Konu Görseli</h3>
-      <div class="topic-images">
-        ${gorseller.map(src=>`
-          <img src="${escapeHtml(src)}" alt="Konu görseli" loading="lazy"
-               onerror="this.style.display='none'">
-        `).join("")}
-      </div>
-    </div>`;
-  }
-
-  html += satir("🔗 Programlar Arası Bileşenler",k.program);
-  html += satir("📝 Öğrenme Kanıtları",k.evidence);
-  html += satir("🧰 Araç-Gereçler / Değerlendirme",k.tools);
-  html += satir("ℹ️ Ek Bilgi",k.extra);
-
-  if(!html){
-    html='<p class="muted">Bu hafta için plan bilgisi bulunmuyor.</p>';
-  }
-
-  icerik.innerHTML=html;
+ seciliHafta=k;tarih.textContent=k.date||"-";let html="";
+ html+=satir("📌 Öğrenme Çıktısı",ogrenmeCiktisiBul(k));
+ html+=satir("🎯 Süreç Bileşenleri",k.process);
+ html+=satir("📖 Konu / İçerik Çerçevesi",k.topic);
+ const gs=gorselleriBul(k);if(gs.length)html+=`<div class="card"><h3>🖼️ Konu Görseli</h3><div class="topic-images">${gs.map(src=>`<img src="${escapeHtml(src)}" alt="Konu görseli" loading="lazy" onerror="this.style.display='none'">`).join("")}</div></div>`;
+ html+=satir("🔗 Programlar Arası Bileşenler",k.program);html+=satir("📝 Öğrenme Kanıtları",k.evidence);html+=satir("🧰 Araç-Gereçler / Değerlendirme",k.tools);html+=satir("ℹ️ Ek Bilgi",k.extra);
+ if(!html)html='<p class="muted">Bu hafta için plan bilgisi bulunmuyor.</p>';icerik.innerHTML=html;
+ const d=gunlukPlanBul(k);haftaActions.innerHTML=d?'<button class="btn btn-primary" id="dailyBtn">📝 Günlük Planı Aç</button>':'<span class="muted">Bu hafta için günlük plan henüz eklenmedi.</span>';
+ if(d)document.getElementById("dailyBtn").addEventListener("click",()=>gunlukAc(d));
 }
-
-function haftaDegisti(){
-  const liste=planlar
-    .filter(x=>x.ders===ders.value && x.sinif===sinif.value)
-    .sort((a,b)=>(a.start||"").localeCompare(b.start||""));
-
-  const k=liste[Number(hafta.value)];
-  if(k) goster(k);
+function haftaDegisti(){const liste=planlar.filter(x=>x.ders===ders.value&&x.sinif===sinif.value).sort((a,b)=>(a.start||"").localeCompare(b.start||""));const k=liste[Number(hafta.value)];if(k)goster(k)}
+function gunlukPlanBul(k){return gunlukPlanlar.find(d=>d.ders===k.ders&&d.sinif===k.sinif&&d.start===k.start)||(gunlukPlanlar.find(d=>d.sinif===k.sinif&&d.start===k.start));}
+function gunlukAc(d){
+ seciliGunluk=d;dailySubtitle.textContent=`${d.ders} • ${d.sinif} • ${d.start||""}${d.end?" – "+d.end:""} • ${d.sure_dakika||60} dakika`;
+ const steps=Array.isArray(d.learning_process)?d.learning_process:[];
+ let html=`<div class="daily-meta"><div class="meta-box"><strong>Ders</strong>${escapeHtml(d.ders)}</div><div class="meta-box"><strong>Sınıf</strong>${escapeHtml(d.sinif)}</div><div class="meta-box"><strong>Süre</strong>${escapeHtml(d.sure_dakika||60)} dakika</div><div class="meta-box"><strong>Kazanım / Öğrenme çıktısı</strong>${escapeHtml(seciliHafta?ogrenmeCiktisiBul(seciliHafta):"")}</div></div>`;
+ if(d.learning_outcome)html+=`<div class="card"><h3>📌 Dersin Hedefi</h3><div class="pre">${escapeHtml(d.learning_outcome)}</div></div>`;
+ html+=`<div class="card timeline"><h3>⏱️ 60 Dakikalık Öğrenme-Öğretme Süreci</h3>${steps.map(s=>`<div class="step"><div class="step-time">${escapeHtml(s.sure)}</div><div><h4>${escapeHtml(s.baslik)}</h4><p>${escapeHtml(s.icerik)}</p></div></div>`).join("")}</div>`;
+ if(d.materials)html+=`<div class="card"><h3>🧰 Araç-Gereçler</h3><div class="pre">${escapeHtml(d.materials)}</div></div>`;
+ if(d.assessment){html+=`<div class="card"><h3>📝 Değerlendirme: ${escapeHtml(d.assessment.name||"")}</h3><ul class="criteria">${(d.assessment.criteria||[]).map(c=>`<li>${escapeHtml(c)}</li>`).join("")}</ul></div>`}
+ if(d.safety)html+=`<div class="card"><h3>⚠️ Güvenlik</h3><div class="pre">${escapeHtml(d.safety)}</div></div>`;
+ html+=`<div class="daily-footer"><strong>Plan Rehberim – Günlük Ders Planı</strong><p class="muted">Bu günlük plan, seçilen haftanın yıllık plan kaydıyla ilişkilendirilmiştir.</p></div>`;
+ dailyContent.innerHTML=html;dailyModal.classList.add("open");dailyModal.setAttribute("aria-hidden","false");
 }
-
-ders.addEventListener("change",dersDegisti);
-sinif.addEventListener("change",sinifDegisti);
-hafta.addEventListener("change",haftaDegisti);
-
-verileriYukle();
+function gunlukKapat(){dailyModal.classList.remove("open");dailyModal.setAttribute("aria-hidden","true")}
+function downloadDaily(){
+ if(!seciliGunluk)return;
+ const title=`${seciliGunluk.sinif} ${seciliGunluk.ders} Günlük Plan ${seciliGunluk.start||""}`;
+ const doc=`<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><title>${escapeHtml(title)}</title><style>body{font-family:Arial;margin:35px;color:#111}h1{font-size:20px;text-align:center}h2{font-size:16px;border-bottom:1px solid #999;padding-bottom:5px}table{width:100%;border-collapse:collapse;margin:12px 0}td,th{border:1px solid #777;padding:8px;vertical-align:top}th{width:110px}.box{border:1px solid #aaa;padding:10px;margin:10px 0}li{margin:6px 0}</style></head><body><h1>GÜNLÜK DERS PLANI</h1><table><tr><th>Ders</th><td>${escapeHtml(seciliGunluk.ders)}</td></tr><tr><th>Sınıf</th><td>${escapeHtml(seciliGunluk.sinif)}</td></tr><tr><th>Tarih</th><td>${escapeHtml((seciliGunluk.start||"")+" – "+(seciliGunluk.end||""))}</td></tr><tr><th>Süre</th><td>${escapeHtml(seciliGunluk.sure_dakika||60)} dakika</td></tr><tr><th>Öğrenme çıktısı / kazanım</th><td>${escapeHtml(seciliHafta?ogrenmeCiktisiBul(seciliHafta):"")}</td></tr></table><h2>ÖĞRENME-ÖĞRETME SÜRECİ</h2><table><tr><th>Süre</th><th>Etkinlik</th><th>Açıklama</th></tr>${(seciliGunluk.learning_process||[]).map(s=>`<tr><td>${escapeHtml(s.sure)}</td><td>${escapeHtml(s.baslik)}</td><td>${escapeHtml(s.icerik)}</td></tr>`).join("")}</table>${seciliGunluk.materials?`<div class="box"><b>Araç-Gereçler:</b><br>${escapeHtml(seciliGunluk.materials)}</div>`:""}${seciliGunluk.assessment?`<div class="box"><b>Değerlendirme: ${escapeHtml(seciliGunluk.assessment.name||"")}</b><ul>${(seciliGunluk.assessment.criteria||[]).map(c=>`<li>${escapeHtml(c)}</li>`).join("")}</ul></div>`:""}${seciliGunluk.safety?`<div class="box"><b>Güvenlik:</b><br>${escapeHtml(seciliGunluk.safety)}</div>`:""}</body></html>`;
+ const blob=new Blob(["\ufeff",doc],{type:"application/msword;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=title.replace(/[^a-zA-Z0-9ğüşöçıİĞÜŞÖÇ ._-]/g,"_")+".doc";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+document.getElementById("closeDaily").addEventListener("click",gunlukKapat);document.getElementById("closeDaily2").addEventListener("click",gunlukKapat);document.getElementById("printDaily").addEventListener("click",()=>window.print());document.getElementById("downloadDaily").addEventListener("click",downloadDaily);dailyModal.addEventListener("click",e=>{if(e.target===dailyModal)gunlukKapat()});
+ders.addEventListener("change",dersDegisti);sinif.addEventListener("change",sinifDegisti);hafta.addEventListener("change",haftaDegisti);verileriYukle();
 </script>
 </body>
 </html>
